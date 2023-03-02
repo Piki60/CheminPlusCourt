@@ -1,4 +1,4 @@
-# CheminPlusCourt
+# Chemin le plus court
 Implémentation de l'algorithme de Bellman-Ford avec les modifications suivantes : 
 
 - optimiser l'algorithme dans le cas où le tableau d (distance) ne change pas
