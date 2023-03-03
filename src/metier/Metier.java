@@ -50,6 +50,24 @@ public class Metier
         return true;
     }
 
+    public boolean supprimerNoeud(Noeud n)
+    {
+        if (n == null || !alNoeuds.contains(n))
+            return false;
+
+        alNoeuds.remove(n);
+        return true;
+    }
+
+    public boolean supprimerArete(Arete a)
+    {
+        if (a == null || !alAretes.contains(a))
+            return false;
+
+        alAretes.remove(a);
+        return true;
+    }
+
     // Getters
     public List<Noeud> getAlNoeuds() {return alNoeuds;}
     public List<Arete> getAlAretes() {return alAretes;}
