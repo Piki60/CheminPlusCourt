@@ -1,14 +1,16 @@
 package metier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.lang.model.element.Element;
-
-/*import org.jdom2.Document;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
-*/
+
 import java.io.File;
+import java.io.FileWriter;
 
 public class Metier 
 {
@@ -52,39 +54,118 @@ public class Metier
     public List<Noeud> getAlNoeuds() {return alNoeuds;}
     public List<Arete> getAlAretes() {return alAretes;}
 
-    // méthode pour lire un fichier texte qui importe directement les noeuds et les arêtes
-    /*public  void lireFichier(File file)
+    public void ecrireXML(File file)
     {
-        Document doc = null;
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        String tab = "\t";
+
+        xml += "<graphe>\n";
+        xml += tab + "<noeuds>\n";
+
+        for(Noeud n : alNoeuds)
+        {
+            xml += tab + tab + "<noeud id=\"" + n.getId() + "\"> \n";
+            tab += "\t";
+
+            xml += tab + "<x>" + n.getX() + "</x>\n";
+            xml += tab + "<y>" + n.getY() + "</y>\n";
+
+            tab = tab.substring(0, tab.length() - 1);
+
+            xml += tab + "</noeud>\n";
+        }
+
+        xml += tab + "</noeuds>\n";
+
+        xml += tab + "<aretes>\n";
+
+        for(Arete a : alAretes)
+        {
+            xml += tab + tab + "<arete id=\"" + a.getId() + "\"> \n";
+            tab += "\t";
+
+            xml += tab + "<noeud1>" + a.getNoeud1().getId() + "</noeud1>\n";
+            xml += tab + "<noeud2>" + a.getNoeud2().getId() + "</noeud2>\n";
+            xml += tab + "<cout>" + a.getCout() + "</cout>\n";
+
+            tab = tab.substring(0, tab.length() - 1);
+
+            xml += tab + "</arete>\n";
+        }
+
+        xml += tab + "</aretes>\n";
+
+        xml += "</graphe>\n";
+
+        try {
+
+            FileWriter fw = new FileWriter(file);
+            fw.write(xml);
+            fw.close();
+
+        } catch (Exception e) 
+            {System.out.println("Erreur lors de l'écriture du fichier");}
+
+
+    }
+
+    public void lireXML(File file)
+    {
+        Map<Integer, Noeud> mapNoeuds = new HashMap<Integer, Noeud>();
+        
+        Document document = null;
         Element racine;
 
         SAXBuilder sxb = new SAXBuilder();
-
         try
         {
-            doc = sxb.build(file);
+            document = sxb.build(file);
         }
         catch(Exception e)
         {
             System.out.println("Erreur lors de la lecture du fichier");
         }
 
-        racine = doc.getRootElement();
+        racine = document.getRootElement();
 
-        
-    }*/
+        Element noeuds = racine.getChild("noeuds");
 
-    public void ecrireXML(File file)
-    {
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        //String 
+        for (Element noeud : noeuds.getChildren())
+        {
+            int id = Integer.parseInt(noeud.getAttributeValue("id"));
+            int x = Integer.parseInt(noeud.getChildText("x"));
+            int y = Integer.parseInt(noeud.getChildText("y"));
+
+            ajouterNoeud(new Noeud(x, y));
+
+            mapNoeuds.put(id, getNoeud(id));
+            
+        }
+
+        Element aretes = racine.getChild("aretes");
+
+        for (Element arete : aretes.getChildren())
+        {
+            int idNoeud1 = Integer.parseInt(arete.getChildText("noeud1"));
+            int idNoeud2 = Integer.parseInt(arete.getChildText("noeud2"));
+
+            Noeud noeud1 = this.getNoeud(idNoeud1);
+            Noeud noeud2 = this.getNoeud(idNoeud2);
+
+            int cout = Integer.parseInt(arete.getChildText("cout"));
+
+            ajouterArete(new Arete(noeud1, noeud2, cout));
+
+
+        }
     }
 
+    public Noeud getNoeud(int id)
+    {
+        for (Noeud n : alNoeuds)
+            if (n.getId() == id)
+                return n;
 
-
-
-
-
-
-
+        return null;
+    }
 }
