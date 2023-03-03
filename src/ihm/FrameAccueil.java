@@ -6,8 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class FrameAccueil extends JFrame implements ActionListener
 {
@@ -55,11 +57,6 @@ public class FrameAccueil extends JFrame implements ActionListener
         this.setVisible(true);
     }
 
-    /*public static void main(String[] args)
-    {
-        new FrameAccueil(new Controleur());
-    }*/
-
     @Override
     public void actionPerformed(ActionEvent e) 
     {
@@ -70,7 +67,21 @@ public class FrameAccueil extends JFrame implements ActionListener
         }
         else if(e.getSource() == this.btnChargerGraphe)
         {
-            new FrameChargerGraphe();
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers XML", "xml");
+
+            fileChooser.setFileFilter(filter);
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+            int returnVal = fileChooser.showOpenDialog(this);
+
+            if(returnVal == JFileChooser.APPROVE_OPTION)
+            {
+                ctrl.lireXML(fileChooser.getSelectedFile());
+                new FrameCreerGraphe(ctrl);
+                
+                this.dispose();
+            }
             this.dispose();
         }
     }
