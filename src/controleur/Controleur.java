@@ -16,7 +16,7 @@ public class Controleur
     public Controleur()
     {
         this.metier = new Metier();
-        this.ihm = new FrameAccueil();
+        this.ihm = new FrameAccueil(this);
     }
 
     public void ecrireXML(File file)
