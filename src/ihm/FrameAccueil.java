@@ -1,5 +1,6 @@
 package ihm;
 
+import controleur.Controleur;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,14 +11,18 @@ import javax.swing.JPanel;
 
 public class FrameAccueil extends JFrame implements ActionListener
 {
+    private Controleur ctrl;
     private JPanel panelAccueil;
     private JButton btnCreerGraphe;
     private JButton btnChargerGraphe;
 
-    public FrameAccueil()
+    public FrameAccueil(Controleur ctrl)
     {
+        this.ctrl = ctrl;
+
         this.setTitle("Accueil");
         this.setSize(500, 500);
+        setLocationRelativeTo(null);
 
         // Panel Accueil
         this.panelAccueil = new JPanel();
@@ -52,7 +57,7 @@ public class FrameAccueil extends JFrame implements ActionListener
 
     public static void main(String[] args)
     {
-        new FrameAccueil();
+        new FrameAccueil(new Controleur());
     }
 
     @Override
@@ -60,7 +65,7 @@ public class FrameAccueil extends JFrame implements ActionListener
     {
         if(e.getSource() == this.btnCreerGraphe)
         {
-            new FrameCreerGraphe();
+            new FrameCreerGraphe( ctrl);
             this.dispose();
         }
         else if(e.getSource() == this.btnChargerGraphe)
