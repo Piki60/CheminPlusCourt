@@ -29,6 +29,7 @@ public class Metier
             return false;
 
         alNoeuds.add(n);
+        System.out.println(n.toString());
         return true;
     }
 
