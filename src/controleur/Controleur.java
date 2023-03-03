@@ -19,15 +19,8 @@ public class Controleur
         this.ihm = new FrameAccueil(this);
     }
 
-    public void ecrireXML(File file)
-    {
-        metier.ecrireXML(file);
-    }
-
-    public void lireXML(File file)
-    {
-        metier.lireXML(file);
-    }
+    public void ecrireXML(File file) { metier.ecrireXML(file);}
+    public void lireXML  (File file) { metier.lireXML  (file);}
 
     public void ajouterNoeud(int x, int y)
     {
@@ -39,22 +32,15 @@ public class Controleur
         metier.ajouterArete(new Arete(noeud1, noeud2, cout));
     }
 
-    public void supprimerNoeud(Noeud noeud)
-    {
-        metier.supprimerNoeud(noeud);
-    }
+    public void supprimerNoeud(Noeud noeud) { metier.supprimerNoeud(noeud); }
+    public void supprimerArete(Arete arete) { metier.supprimerArete(arete); }
 
-    public void supprimerArete(Arete arete)
-    {
-        metier.supprimerArete(arete);
-    }
+    public Metier getMetier() { return this.metier; }
 
     public static void main(String[] args)
     {
         new Controleur();
     }
 
-    public Metier getMetier() {
-        return this.metier;
-    }
+    
 }
