@@ -55,10 +55,10 @@ public class FrameAccueil extends JFrame implements ActionListener
         this.setVisible(true);
     }
 
-    public static void main(String[] args)
+    /*public static void main(String[] args)
     {
         new FrameAccueil(new Controleur());
-    }
+    }*/
 
     @Override
     public void actionPerformed(ActionEvent e) 

@@ -53,4 +53,8 @@ public class Controleur
     {
         new Controleur();
     }
+
+    public Metier getMetier() {
+        return this.metier;
+    }
 }

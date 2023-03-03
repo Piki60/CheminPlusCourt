@@ -1,7 +1,6 @@
 package ihm;
 
 import metier.Noeud;
-import metier.Arete;
 import controleur.Controleur;
 
 import java.awt.Color;
@@ -11,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -99,7 +97,8 @@ public class PanelFormulaire extends JPanel implements ActionListener
 
         JPanel panelLstNoeud = new JPanel();
         panelLstNoeud.setBackground(new Color(250,250,250));
-        this.listNoeuds = new JList();
+        this.listNoeuds = new JList<Noeud>();
+        
         this.scrollPaneNoeuds = new JScrollPane(this.listNoeuds);
         panelLstNoeud.add(this.scrollPaneNoeuds);
 
