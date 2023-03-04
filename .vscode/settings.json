@@ -1,6 +1,7 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "/home/etudiant/ma210374/TP/s3/r3.02_def_eff/algo_av/jdom-2.0.6.jar"
+        "/home/etudiant/ma210374/TP/s3/r3.02_def_eff/algo_av/jdom-2.0.6.jar",
+        "c:\\iut\\TP\\s3\\s3.01_dev_application\\jdom-2.0.6.jar"
     ]
 }

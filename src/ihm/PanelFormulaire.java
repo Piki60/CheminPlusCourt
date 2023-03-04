@@ -1,5 +1,6 @@
 package ihm;
 
+import metier.Arete;
 import metier.Noeud;
 import controleur.Controleur;
 
@@ -7,9 +8,11 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,23 +29,29 @@ public class PanelFormulaire extends JPanel implements ActionListener
         private JPanel panelNoeuds;
         private JPanel panelAretes;
         private JPanel panelBtn;
+        private List<Noeud> lstNoeuds;
+        private List<Arete> lstAretes;
 
         private JLabel      lblX;
         private JLabel      lblY;
         private JTextField  txtX;
         private JTextField  txtY;
         private JButton     btnAjouterNoeud;
-        private JList       listNoeuds;
+        private JButton     btnSupprimerNoeud;
+        private JList<Noeud>       listNoeuds;
+        private DefaultListModel<Noeud> listModelNoeuds;
         private JScrollPane scrollPaneNoeuds;
 
         private JLabel      lblNoeud1;
         private JLabel      lblNoeud2;
         private JLabel      lblCout;
-        private JComboBox   comboNoeud1;
-        private JComboBox   comboNoeud2;
+        private JComboBox<Noeud>   comboNoeud1;
+        private JComboBox<Noeud>   comboNoeud2;
         private JTextField  txtCout;
         private JButton     btnAjouterArete;
-        private JList       listAretes;
+        private JButton     btnSupprimerArete;
+        private JList<Arete>       listAretes;
+        private DefaultListModel<Arete> listModelAretes;
         private JScrollPane scrollPaneAretes;
 
         private JButton btnSauvegarder;
@@ -54,13 +63,16 @@ public class PanelFormulaire extends JPanel implements ActionListener
         this.ctrl = ctrl;
         this.setBackground(new Color(216,216,216));
         this.setLayout(new GridLayout(5,1));
-        
+
+        this.lstNoeuds = this.ctrl.getMetier().getAlNoeuds();      
+        this.lstAretes = this.ctrl.getMetier().getAlAretes();  
 
         // Panel Noeuds
         this.panelNoeuds = new JPanel();
         this.panelNoeuds.setBackground(new Color(216,216,216));
         GroupLayout layout = new GroupLayout(this.panelNoeuds);
         this.panelNoeuds.setLayout(layout);
+
 
         //Composants du panel Noeuds
         this.lblX = new JLabel("Position X :", JLabel.RIGHT);
@@ -69,8 +81,6 @@ public class PanelFormulaire extends JPanel implements ActionListener
         this.txtX = new JTextField(10);
         this.txtX.addKeyListener(new KeyAdapter() {
                 public void keyPressed(KeyEvent ke) {
-                   String value = txtX.getText();
-                   int l = value.length();
                    if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9' || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_DELETE) {
                       txtX.setEditable(true);
                    } else {
@@ -82,8 +92,6 @@ public class PanelFormulaire extends JPanel implements ActionListener
         this.txtY = new JTextField(10);
         this.txtY.addKeyListener(new KeyAdapter() {
                 public void keyPressed(KeyEvent ke) {
-                   String value = txtY.getText();
-                   int l = value.length();
                    if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9' || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_DELETE) {
                       txtY.setEditable(true);
                    } else {
@@ -94,13 +102,22 @@ public class PanelFormulaire extends JPanel implements ActionListener
 
         this.btnAjouterNoeud = new JButton("Ajouter un noeud");
         this.btnAjouterNoeud.setBackground(new Color(0, 151, 178));
+        
+        this.btnSupprimerNoeud = new JButton("Supprimer un noeud");
+        this.btnSupprimerNoeud.setBackground(new Color(0, 151, 178));
 
-        JPanel panelLstNoeud = new JPanel();
-        panelLstNoeud.setBackground(new Color(250,250,250));
+        // Liste des noeuds
         this.listNoeuds = new JList<Noeud>();
+
+        this.listModelNoeuds = new DefaultListModel<Noeud>();
+        for (int i = 0; i < this.lstNoeuds.size(); i++)
+        {
+                this.listModelNoeuds.addElement(this.lstNoeuds.get(i));
+        }
+        this.listNoeuds.setModel(this.listModelNoeuds);
         
         this.scrollPaneNoeuds = new JScrollPane(this.listNoeuds);
-        panelLstNoeud.add(this.scrollPaneNoeuds);
+        this.scrollPaneNoeuds.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Ajout des composants au panel Noeuds
         layout.setAutoCreateGaps(true);
@@ -114,10 +131,11 @@ public class PanelFormulaire extends JPanel implements ActionListener
 
         hGroup.addGroup(layout.createParallelGroup().
                 addComponent(this.txtX).
-                addComponent(this.txtY));
+                addComponent(this.txtY).
+                addComponent(this.btnSupprimerNoeud));
 
         hGroup.addGroup(layout.createParallelGroup().
-                addComponent(panelLstNoeud));
+                addComponent(this.scrollPaneNoeuds));
         
         layout.setHorizontalGroup(hGroup);
 
@@ -125,13 +143,14 @@ public class PanelFormulaire extends JPanel implements ActionListener
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblX).
                 addComponent(this.txtX)
-                .addComponent(panelLstNoeud));
+                .addComponent(this.scrollPaneNoeuds));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblY).
                 addComponent(this.txtY)
-                .addComponent(panelLstNoeud));
+                .addComponent(this.scrollPaneNoeuds));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(this.btnAjouterNoeud));
+                addComponent(this.btnAjouterNoeud).
+                addComponent(this.btnSupprimerNoeud));
         layout.setVerticalGroup(vGroup);
 
 
@@ -148,12 +167,12 @@ public class PanelFormulaire extends JPanel implements ActionListener
         this.lblCout = new JLabel("Cout :");
 
         this.comboNoeud1 = new JComboBox<>();
+        
+        
         this.comboNoeud2 = new JComboBox<>();
         this.txtCout = new JTextField(10);
         this.txtCout.addKeyListener(new KeyAdapter() {
                 public void keyPressed(KeyEvent ke) {
-                   String value = txtCout.getText();
-                   int l = value.length();
                    if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9' || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_DELETE) {
                       txtCout.setEditable(true);
                    } else {
@@ -165,11 +184,23 @@ public class PanelFormulaire extends JPanel implements ActionListener
         this.btnAjouterArete = new JButton("Ajouter une arete");
         this.btnAjouterArete.setBackground(new Color(0, 151, 178));
 
-        JPanel panelLstArete = new JPanel();
-        panelLstArete.setBackground(new Color(250,250,250));
-        this.listAretes = new JList();
+        this.btnSupprimerArete = new JButton("Supprimer une arete");
+        this.btnSupprimerArete.setBackground(new Color(0, 151, 178));
+
+        // Liste des aretes
+        this.listAretes = new JList<Arete>();
+
+        this.listModelAretes = new DefaultListModel<Arete>();
+        for (int i = 0; i < this.lstAretes.size(); i++)
+        {
+                this.listModelAretes.addElement(this.lstAretes.get(i));
+        }
+
+        this.listAretes.setModel(this.listModelAretes);
+        
         this.scrollPaneAretes = new JScrollPane(this.listAretes);
-        panelLstArete.add(this.scrollPaneAretes);
+        this.scrollPaneAretes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        
 
         // Ajout des composants au panel Aretes
         layout2.setAutoCreateGaps(true);
@@ -185,10 +216,11 @@ public class PanelFormulaire extends JPanel implements ActionListener
         hGroup2.addGroup(layout2.createParallelGroup().
                 addComponent(this.comboNoeud1).
                 addComponent(this.comboNoeud2).
-                addComponent(this.txtCout));
+                addComponent(this.txtCout).
+                addComponent(this.btnSupprimerArete));
         
         hGroup2.addGroup(layout2.createParallelGroup().
-                addComponent(panelLstArete));
+                addComponent(this.scrollPaneAretes));
         
         layout2.setHorizontalGroup(hGroup2);
 
@@ -196,20 +228,21 @@ public class PanelFormulaire extends JPanel implements ActionListener
         vGroup2.addGroup(layout2.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblNoeud1).
                 addComponent(this.comboNoeud1)
-                .addComponent(panelLstArete));
+                .addComponent(this.scrollPaneAretes));
 
         vGroup2.addGroup(layout2.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblNoeud2).
                 addComponent(this.comboNoeud2)
-                .addComponent(panelLstArete));
+                .addComponent(this.scrollPaneAretes));
         
         vGroup2.addGroup(layout2.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblCout).
                 addComponent(this.txtCout)
-                .addComponent(panelLstArete));
+                .addComponent(this.scrollPaneAretes));
 
         vGroup2.addGroup(layout2.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(this.btnAjouterArete));
+                addComponent(this.btnAjouterArete).
+                addComponent(this.btnSupprimerArete));
 
         layout2.setVerticalGroup(vGroup2);
 
@@ -259,6 +292,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
                                 this.ctrl.ajouterNoeud(x, y);
                                 this.txtX.setText("");
                                 this.txtY.setText("");
+                                this.majIHM();
                         }
                 }
                 else if(e.getSource() == this.btnAjouterArete)
@@ -276,6 +310,32 @@ public class PanelFormulaire extends JPanel implements ActionListener
                                 this.txtCout.setText("");
                         }
                 }
+                else if(e.getSource() == this.btnSupprimerNoeud)
+                {
+                        if(this.listNoeuds.getSelectedValue() == null)
+                        {
+                                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un noeud", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else
+                        {
+                                Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
+                                this.ctrl.supprimerNoeud(n);
+                                this.majIHM();
+                        }
+                }
+                else if(e.getSource() == this.btnSupprimerArete)
+                {
+                        if(this.listAretes.getSelectedValue() == null)
+                        {
+                                JOptionPane.showMessageDialog(null, "Veuillez sélectionner une arête", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else
+                        {
+                                Arete a = (Arete) this.listAretes.getSelectedValue();
+                                this.ctrl.supprimerArete(a);
+                                this.majIHM();
+                        }
+                }
                 else if(e.getSource() == this.btnSauvegarder)
                 {
                         
@@ -284,4 +344,36 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 {
         }
         }
+
+
+        private void majIHM() 
+        {
+                this.listModelNoeuds.removeAllElements();
+                for (int i = 0; i < this.lstNoeuds.size(); i++)
+                {
+                        this.listModelNoeuds.addElement(this.lstNoeuds.get(i));
+                }
+                this.listNoeuds.setModel(this.listModelNoeuds);
+
+                this.listModelAretes.removeAllElements();
+                for (int i = 0; i < this.lstAretes.size(); i++)
+                {
+                        this.listModelAretes.addElement(this.lstAretes.get(i));
+                }
+                this.listAretes.setModel(this.listModelAretes);
+
+                this.comboNoeud1.removeAllItems();
+                this.comboNoeud2.removeAllItems();
+
+                for (int i = 0; i < this.lstNoeuds.size(); i++)
+                {
+                        this.comboNoeud1.addItem(this.lstNoeuds.get(i));
+                        this.comboNoeud2.addItem(this.lstNoeuds.get(i));
+                }
+
+                this.repaint();
+
+                
+        }
+               
 }
