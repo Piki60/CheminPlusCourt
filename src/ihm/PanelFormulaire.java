@@ -8,16 +8,15 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.print.attribute.standard.DialogTypeSelection;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -26,9 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import java.io.File; 
-import java.io.IOException;
 
 public class PanelFormulaire extends JPanel implements ActionListener
 {
@@ -71,8 +67,8 @@ public class PanelFormulaire extends JPanel implements ActionListener
         this.setBackground(new Color(216,216,216));
         this.setLayout(new GridLayout(5,1));
 
-        this.lstNoeuds = this.ctrl.getMetier().getAlNoeuds();      
-        this.lstAretes = this.ctrl.getMetier().getAlAretes();  
+        this.lstNoeuds = this.ctrl.getAlNoeuds();      
+        this.lstAretes = this.ctrl.getAlAretes();  
 
         // Panel Noeuds
         this.panelNoeuds = new JPanel();
@@ -109,6 +105,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
         
         this.scrollPaneNoeuds = new JScrollPane(this.listNoeuds);
         this.scrollPaneNoeuds.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.scrollPaneNoeuds.setPreferredSize(new java.awt.Dimension(200, 100));
 
         // Ajout des composants au panel Noeuds
         layout.setAutoCreateGaps(true);
@@ -183,6 +180,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
         
         this.scrollPaneAretes = new JScrollPane(this.listAretes);
         this.scrollPaneAretes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.scrollPaneAretes.setPreferredSize(new java.awt.Dimension(200, 100));
         
 
         // Ajout des composants au panel Aretes
@@ -254,6 +252,8 @@ public class PanelFormulaire extends JPanel implements ActionListener
         // Ajout des listeners
         this.btnAjouterNoeud.addActionListener(this);
         this.btnAjouterArete.addActionListener(this);
+        this.btnSupprimerNoeud.addActionListener(this);
+        this.btnSupprimerArete.addActionListener(this);
         this.btnSauvegarder.addActionListener(this);
         this.btnCheminCourt.addActionListener(this);
     }
@@ -289,10 +289,23 @@ public class PanelFormulaire extends JPanel implements ActionListener
                                 Noeud n1 = (Noeud) this.comboNoeud1.getSelectedItem();
                                 Noeud n2 = (Noeud) this.comboNoeud2.getSelectedItem();
                                 int cout = Integer.parseInt(this.txtCout.getText());
+                                
+
+                                for ( Arete a : this.lstAretes )
+                                {
+                                        if ( a.getNoeud1() == n1 && a.getNoeud2() == n2 )
+                                        {
+                                                JOptionPane.showMessageDialog(null, "L'arete existe déjà", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                                return;
+                                        }
+                                }
+
                                 this.ctrl.ajouterArete(n1, n2, cout);
-                                this.comboNoeud1.setSelectedItem(1);
-                                this.comboNoeud2.setSelectedItem(1);
+
                                 this.txtCout.setText("");
+                                this.comboNoeud1.setSelectedIndex(-1);
+                                this.comboNoeud2.setSelectedIndex(-1);
+
                                 this.majIHM();
                         }
                 }
@@ -305,6 +318,15 @@ public class PanelFormulaire extends JPanel implements ActionListener
                         else
                         {
                                 Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
+
+                                for ( Arete a : this.lstAretes )
+                                {
+                                        if ( a.getNoeud1() == n || a.getNoeud2() == n )
+                                        {
+                                                this.ctrl.supprimerArete(a);
+                                        }
+                                }
+
                                 this.ctrl.supprimerNoeud(n);
                                 this.majIHM();
                         }
@@ -324,45 +346,36 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
                 else if(e.getSource() == this.btnSauvegarder)
                 {
-                        //sauvegarder dans un fichier
-                       JDialog dialog = new JDialog();
-
                         JFileChooser fileChooser = new JFileChooser();
-                        fileChooser.setDialogTitle("Sauvegarder");
-                        
-                        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml");
-                        fileChooser.setFileFilter(filter);
-                        fileChooser.setApproveButtonText("Sauvegarder");
-                        fileChooser.setApproveButtonToolTipText("Sauvegarder");
+                        fileChooser.setDialogTitle("Sauvegarder le graphe");
+                        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                        fileChooser.setAcceptAllFileFilterUsed(false);
+                        fileChooser.setFileFilter(new FileNameExtensionFilter("Fichier XML", "xml"));
 
-                        int userSelection = fileChooser.showSaveDialog(dialog);
-                        
+                        int userSelection = fileChooser.showSaveDialog(this);
+
                         if (userSelection == JFileChooser.APPROVE_OPTION) 
                         {
                                 File fileToSave = fileChooser.getSelectedFile();
-                                System.out.println("Enregistrer sous: " + fileToSave.getAbsolutePath());
-                                this.ctrl.ecrireXML(fileToSave);
+                                this.ctrl.sauvegarder(fileToSave);
                         }
-
+                        
                 }
                 else if(e.getSource() == this.btnCheminCourt)
                 {
-                        
-                }
+        }
         }
 
 
         private void majIHM() 
         {
-                // Mise à jour de la liste des noeuds
-                this.listModelNoeuds.removeAllElements();
+               this.listModelNoeuds.removeAllElements();
                 for (int i = 0; i < this.lstNoeuds.size(); i++)
                 {
                         this.listModelNoeuds.addElement(this.lstNoeuds.get(i));
                 }
                 this.listNoeuds.setModel(this.listModelNoeuds);
 
-                // Mise à jour de la liste des arêtes
                 this.listModelAretes.removeAllElements();
                 for (int i = 0; i < this.lstAretes.size(); i++)
                 {
@@ -370,7 +383,6 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
                 this.listAretes.setModel(this.listModelAretes);
 
-                // Mise à jour des combobox
                 this.comboNoeud1.removeAllItems();
                 this.comboNoeud2.removeAllItems();
 
@@ -381,6 +393,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
 
                 this.repaint();
+                
         }
                
 
