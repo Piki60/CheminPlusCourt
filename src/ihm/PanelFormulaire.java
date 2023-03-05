@@ -79,26 +79,10 @@ public class PanelFormulaire extends JPanel implements ActionListener
         this.lblY = new JLabel("Position Y :", JLabel.RIGHT);
 
         this.txtX = new JTextField(10);
-        this.txtX.addKeyListener(new KeyAdapter() {
-                public void keyPressed(KeyEvent ke) {
-                   if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9' || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_DELETE) {
-                      txtX.setEditable(true);
-                   } else {
-                      txtX.setEditable(false);
-                   }
-                }
-             });
+        this.txtX.addKeyListener(new EntierTextField());
 
         this.txtY = new JTextField(10);
-        this.txtY.addKeyListener(new KeyAdapter() {
-                public void keyPressed(KeyEvent ke) {
-                   if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9' || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_DELETE) {
-                      txtY.setEditable(true);
-                   } else {
-                      txtY.setEditable(false);
-                   }
-                }
-             });
+        this.txtY.addKeyListener(new EntierTextField());
 
         this.btnAjouterNoeud = new JButton("Ajouter un noeud");
         this.btnAjouterNoeud.setBackground(new Color(0, 151, 178));
@@ -171,15 +155,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
         
         this.comboNoeud2 = new JComboBox<>();
         this.txtCout = new JTextField(10);
-        this.txtCout.addKeyListener(new KeyAdapter() {
-                public void keyPressed(KeyEvent ke) {
-                   if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9' || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_DELETE) {
-                      txtCout.setEditable(true);
-                   } else {
-                      txtCout.setEditable(false);
-                   }
-                }
-             });
+        this.txtCout.addKeyListener(new EntierTextField());
 
         this.btnAjouterArete = new JButton("Ajouter une arete");
         this.btnAjouterArete.setBackground(new Color(0, 151, 178));
@@ -376,4 +352,18 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 
         }
                
+
+        private class EntierTextField extends KeyAdapter
+        {
+                @Override
+                public void keyTyped(KeyEvent e) 
+                {
+                        // on récupère le caractère qui vient d'être saisi et si ce n'est pas un chiffre (méthode isDigit()), on l'ignore
+                        char c = e.getKeyChar();
+                        if(!Character.isDigit(c))
+                        {
+                                e.consume();
+                        }
+                }
+        }
 }
