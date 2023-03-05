@@ -1,6 +1,7 @@
 package controleur;
 
 import java.io.File;
+import java.util.List;
 
 import ihm.FrameAccueil;
 
@@ -41,6 +42,12 @@ public class Controleur
     {
         new Controleur();
     }
+
+    public void setPositionNoeud(Integer idNoeudDrag, int x, int y) 
+    {
+        metier.setPositionNoeud(idNoeudDrag, x, y);
+    }
+
 
     
 }
