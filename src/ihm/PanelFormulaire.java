@@ -5,6 +5,7 @@ import metier.Noeud;
 import controleur.Controleur;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -109,6 +110,8 @@ public class PanelFormulaire extends JPanel implements ActionListener
         
         this.scrollPaneNoeuds = new JScrollPane(this.listNoeuds);
         this.scrollPaneNoeuds.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.scrollPaneNoeuds.setSize(200,200);
+        this.scrollPaneNoeuds.setPreferredSize(new Dimension(200,200));
 
         // Ajout des composants au panel Noeuds
         layout.setAutoCreateGaps(true);
@@ -183,7 +186,8 @@ public class PanelFormulaire extends JPanel implements ActionListener
         
         this.scrollPaneAretes = new JScrollPane(this.listAretes);
         this.scrollPaneAretes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        
+        this.scrollPaneAretes.setSize(200,200);
+        this.scrollPaneAretes.setPreferredSize(new Dimension(200,200));
 
         // Ajout des composants au panel Aretes
         layout2.setAutoCreateGaps(true);
