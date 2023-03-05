@@ -12,16 +12,23 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.print.attribute.standard.DialogTypeSelection;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.io.File; 
+import java.io.IOException;
 
 public class PanelFormulaire extends JPanel implements ActionListener
 {
@@ -307,7 +314,10 @@ public class PanelFormulaire extends JPanel implements ActionListener
                                 Noeud n2 = (Noeud) this.comboNoeud2.getSelectedItem();
                                 int cout = Integer.parseInt(this.txtCout.getText());
                                 this.ctrl.ajouterArete(n1, n2, cout);
+                                this.comboNoeud1.setSelectedItem(1);
+                                this.comboNoeud2.setSelectedItem(1);
                                 this.txtCout.setText("");
+                                this.majIHM();
                         }
                 }
                 else if(e.getSource() == this.btnSupprimerNoeud)
@@ -338,16 +348,37 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
                 else if(e.getSource() == this.btnSauvegarder)
                 {
+                        //sauvegarder dans un fichier
+                       JDialog dialog = new JDialog();
+
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setDialogTitle("Sauvegarder");
                         
+                        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml");
+                        fileChooser.setFileFilter(filter);
+                        fileChooser.setApproveButtonText("Sauvegarder");
+                        fileChooser.setApproveButtonToolTipText("Sauvegarder");
+
+                        int userSelection = fileChooser.showSaveDialog(dialog);
+                        
+                        if (userSelection == JFileChooser.APPROVE_OPTION) 
+                        {
+                                File fileToSave = fileChooser.getSelectedFile();
+                                System.out.println("Enregistrer sous: " + fileToSave.getAbsolutePath());
+                                this.ctrl.ecrireXML(fileToSave);
+                        }
+
                 }
                 else if(e.getSource() == this.btnCheminCourt)
                 {
-        }
+                        
+                }
         }
 
 
         private void majIHM() 
         {
+                // Mise à jour de la liste des noeuds
                 this.listModelNoeuds.removeAllElements();
                 for (int i = 0; i < this.lstNoeuds.size(); i++)
                 {
@@ -355,6 +386,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
                 this.listNoeuds.setModel(this.listModelNoeuds);
 
+                // Mise à jour de la liste des arêtes
                 this.listModelAretes.removeAllElements();
                 for (int i = 0; i < this.lstAretes.size(); i++)
                 {
@@ -362,6 +394,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
                 this.listAretes.setModel(this.listModelAretes);
 
+                // Mise à jour des combobox
                 this.comboNoeud1.removeAllItems();
                 this.comboNoeud2.removeAllItems();
 
@@ -372,8 +405,6 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
 
                 this.repaint();
-
-                
         }
                
 }

@@ -53,6 +53,6 @@ public class Arete
     @Override
     public String toString()
     {
-        return "Arete{" + "id=" + id + ", noeud1=" + noeud1 + ", noeud2=" + noeud2 + ", cout=" + cout + '}';
+        return id + ":" + noeud1.getId() + " =>" + noeud2.getId() + " = " + cout;
     }
 }

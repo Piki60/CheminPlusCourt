@@ -56,6 +56,12 @@ public class Metier
         if (n == null || !alNoeuds.contains(n))
             return false;
 
+        for (Arete a : alAretes)
+        {
+            if (a.getNoeud1().getId() == n.getId() || a.getNoeud2().getId() == n.getId())
+                alAretes.remove(a);
+        }
+
         alNoeuds.remove(n);
         return true;
     }
@@ -64,7 +70,7 @@ public class Metier
     {
         if (a == null || !alAretes.contains(a))
             return false;
-
+        
         alAretes.remove(a);
         return true;
     }
@@ -186,5 +192,15 @@ public class Metier
                 return n;
 
         return null;
+    }
+
+    public void setPositionNoeud(Integer idNoeudDrag, int x, int y) 
+    {
+        for (Noeud n : alNoeuds)
+            if (n.getId() == idNoeudDrag)
+            {
+                n.setX(x);
+                n.setY(y);
+            }
     }
 }
