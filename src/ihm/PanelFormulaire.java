@@ -30,6 +30,11 @@ import controleur.Controleur;
 import metier.Arete;
 import metier.Noeud;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
+
+
 public class PanelFormulaire extends JPanel implements ActionListener, ListSelectionListener
 {
         private Controleur ctrl;
@@ -114,6 +119,8 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 this.listModelNoeuds.addElement(this.lstNoeuds.get(i));
         }
         this.listNoeuds.setModel(this.listModelNoeuds);
+
+        this.listNoeuds.addMouseListener(new DoubleClick());
         
         this.scrollPaneNoeuds = new JScrollPane(this.listNoeuds);
         this.scrollPaneNoeuds.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -170,9 +177,8 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         this.lblCout = new JLabel("Cout :");
 
         this.comboNoeud1 = new JComboBox<>();
-        
-        
         this.comboNoeud2 = new JComboBox<>();
+
         this.txtCout = new JTextField(10);
         this.txtCout.addKeyListener(new EntierTextField());
 
@@ -345,6 +351,14 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                         }
 
                         this.ctrl.supprimerNoeud(n);
+
+                        this.txtX.setText("");
+                        this.txtY.setText("");
+
+                        this.btnAjouterNoeud.setEnabled(true);
+                        this.btnModifierNoeud.setEnabled(false);
+                        this.btnSupprimerNoeud.setEnabled(false);
+
                         this.majIHM();
                         
                 }
@@ -415,9 +429,12 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
                         this.txtX.setText("");
                         this.txtY.setText("");
-                        this.listNoeuds.clearSelection();
 
+                        this.btnAjouterNoeud.setEnabled(true);
                         this.btnModifierNoeud.setEnabled(false);
+                        this.btnSupprimerNoeud.setEnabled(false);
+
+                        this.listNoeuds.clearSelection();
 
                         this.majIHM();
                 }
@@ -439,6 +456,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 this.btnSupprimerNoeud.setEnabled(true);
                                 this.btnModifierNoeud.setEnabled(true);
                         }
+
                 }
         }
 
@@ -471,6 +489,26 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 this.repaint();
                 //this.frame.majIHM();
                 
+        }
+
+        private class DoubleClick extends MouseAdapter
+        {
+                @Override
+                public void mouseClicked(MouseEvent e) 
+                {
+                        if (e.getClickCount() == 2) 
+                        {               
+                                PanelFormulaire.this.listNoeuds.clearSelection();
+
+                                PanelFormulaire.this.txtX.setText("");
+                                PanelFormulaire.this.txtY.setText("");
+
+                                PanelFormulaire.this.btnAjouterNoeud.setEnabled(true);
+                                PanelFormulaire.this.btnModifierNoeud.setEnabled(false);
+                                PanelFormulaire.this.btnSupprimerNoeud.setEnabled(false);
+    
+                        }
+                }
         }
                
 
