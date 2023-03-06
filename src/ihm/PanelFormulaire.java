@@ -359,6 +359,17 @@ public class PanelFormulaire extends JPanel implements ActionListener
                         if (userSelection == JFileChooser.APPROVE_OPTION) 
                         {
                                 File fileToSave = fileChooser.getSelectedFile();
+
+                                if ( !fileToSave.getName().endsWith(".xml"))
+                                        fileToSave = new File(fileToSave.getAbsolutePath() + ".xml");   
+
+                                if ( fileToSave.exists() )
+                                {
+                                        int reponse = JOptionPane.showConfirmDialog(null, "Le fichier existe déjà, voulez-vous le remplacer ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                                        if ( reponse == JOptionPane.NO_OPTION )
+                                                return;
+                                }
+
                                 this.ctrl.sauvegarder(fileToSave);
                         }
                         
@@ -376,7 +387,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
                                 return;
                         }
                         
-                        DialogCheminCourt dialog = new DialogCheminCourt();                        
+                        new DialogCheminCourt();                        
                 }
         }
 
@@ -427,7 +438,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
 
         private class DialogCheminCourt extends JDialog implements ActionListener
         {
-                private JComboBox comboNoeud1;
+                private JComboBox<Noeud> combo;
 
                 private JButton btnValider;
                 private JButton btnAnnuler;
@@ -446,7 +457,10 @@ public class PanelFormulaire extends JPanel implements ActionListener
                         //creation des composants
                         JLabel labelNoeud = new JLabel("Noeud de départ : ");
 
-                        this.comboNoeud1 = PanelFormulaire.this.comboNoeud1;
+                        for (int i = 0; i < lstNoeuds.size(); i++)
+                        {
+                                this.combo.addItem(lstNoeuds.get(i));
+                        }
 
                         this.btnValider = new JButton("Valider");
                         this.btnAnnuler = new JButton("Annuler");
@@ -454,7 +468,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
                         //positionnement des composants
 
                         labelNoeud.setBounds(10, 20, 150, 20);
-                        this.comboNoeud1.setBounds(160, 20, 150, 20);
+                        this.combo.setBounds(160, 20, 150, 20);
 
                         this.btnValider.setBounds(10, 60, 150, 20);
                         this.btnAnnuler.setBounds(160, 60, 150, 20);
@@ -462,7 +476,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
                         //ajout des composants
 
                         this.add(labelNoeud);
-                        this.add(this.comboNoeud1);
+                        this.add(this.combo);
 
                         this.add(this.btnValider);
                         this.add(this.btnAnnuler);
@@ -478,13 +492,13 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 {
                         if(e.getSource() == this.btnValider)
                         {
-                                if(this.comboNoeud1.getSelectedIndex() == -1)
+                                if(this.combo.getSelectedIndex() == -1)
                                 {
                                         JOptionPane.showMessageDialog(null, "Veuillez sélectionner un noeud", "Erreur", JOptionPane.ERROR_MESSAGE);
                                 }
                                 else
                                 {
-                                        Noeud n = (Noeud) this.comboNoeud1.getSelectedItem();
+                                        Noeud n = (Noeud) this.combo.getSelectedItem();
                                         System.out.println(n.toString());
                                         //ctrl.cheminLePlusCourt(n);
                                 }
