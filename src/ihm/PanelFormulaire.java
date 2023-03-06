@@ -30,7 +30,7 @@ import controleur.Controleur;
 import metier.Arete;
 import metier.Noeud;
 
-public class PanelFormulaire extends JPanel implements ActionListener
+public class PanelFormulaire extends JPanel implements ActionListener, ListSelectionListener
 {
         private Controleur ctrl;
         private FrameCreerGraphe frame;
@@ -103,6 +103,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
         
         this.btnSupprimerNoeud = new JButton("Supprimer un noeud");
         this.btnSupprimerNoeud.setBackground(new Color(0, 151, 178));
+        this.btnSupprimerNoeud.setEnabled(false);
 
         // Liste des noeuds
         this.listNoeuds = new JList<Noeud>();
@@ -272,6 +273,8 @@ public class PanelFormulaire extends JPanel implements ActionListener
         this.btnModifierNoeud.addActionListener(this);
         this.btnSauvegarder.addActionListener(this);
         this.btnCheminCourt.addActionListener(this);
+
+        this.listNoeuds.addListSelectionListener(this);
     }
 
 
@@ -330,25 +333,20 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
                 else if(e.getSource() == this.btnSupprimerNoeud)
                 {
-                        if(this.listNoeuds.getSelectedValue() == null)
-                        {
-                                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un noeud", "Erreur", JOptionPane.ERROR_MESSAGE);
-                        }
-                        else
-                        {
-                                Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
+                        
+                        Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
 
-                                for ( Arete a : this.lstAretes )
+                        for ( Arete a : this.lstAretes )
+                        {
+                                if ( a.getNoeud1() == n || a.getNoeud2() == n )
                                 {
-                                        if ( a.getNoeud1() == n || a.getNoeud2() == n )
-                                        {
-                                                this.ctrl.supprimerArete(a);
-                                        }
+                                        this.ctrl.supprimerArete(a);
                                 }
-
-                                this.ctrl.supprimerNoeud(n);
-                                this.majIHM();
                         }
+
+                        this.ctrl.supprimerNoeud(n);
+                        this.majIHM();
+                        
                 }
                 else if(e.getSource() == this.btnSupprimerArete)
                 {
@@ -406,6 +404,42 @@ public class PanelFormulaire extends JPanel implements ActionListener
                         
                         new DialogCheminCourt();                        
                 }
+                else if (e.getSource() == this.btnModifierNoeud)
+                {
+                        Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
+
+                        int newX = Integer.parseInt(this.txtX.getText());
+                        int newY = Integer.parseInt(this.txtY.getText());
+
+                        this.ctrl.modifierNoeud(n.getId(), newX, newY);
+
+                        this.txtX.setText("");
+                        this.txtY.setText("");
+                        this.listNoeuds.clearSelection();
+
+                        this.btnModifierNoeud.setEnabled(false);
+
+                        this.majIHM();
+                }
+        }
+
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) 
+        {
+                if(e.getSource() == this.listNoeuds)
+                {
+                        if(this.listNoeuds.getSelectedValue() != null)
+                        {
+                                Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
+                                this.txtX.setText(String.valueOf(n.getX()));
+                                this.txtY.setText(String.valueOf(n.getY()));
+
+                                this.btnAjouterNoeud.setEnabled(false);
+                                this.btnSupprimerNoeud.setEnabled(true);
+                                this.btnModifierNoeud.setEnabled(true);
+                        }
+                }
         }
 
 
@@ -435,7 +469,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
 
                 this.repaint();
-                this.frame.majIHM();
+                //this.frame.majIHM();
                 
         }
                
