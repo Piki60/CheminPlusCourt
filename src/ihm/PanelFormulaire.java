@@ -33,6 +33,7 @@ import metier.Noeud;
 public class PanelFormulaire extends JPanel implements ActionListener, ListSelectionListener
 {
         private Controleur ctrl;
+        private FrameCreerGraphe frame;
         private JPanel panelNoeuds;
         private JPanel panelAretes;
         private JPanel panelBtn;
@@ -67,8 +68,9 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         private JButton btnCheminCourt;
 
 
-    public PanelFormulaire(Controleur ctrl)
+    public PanelFormulaire(FrameCreerGraphe frame, Controleur ctrl)
     {
+        this.frame = frame;
         this.ctrl = ctrl;
         this.setBackground(new Color(216,216,216));
         this.setLayout(new GridLayout(5,1));
@@ -443,6 +445,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 }
 
                 this.repaint();
+                this.frame.majIHM();
                 
         }
                

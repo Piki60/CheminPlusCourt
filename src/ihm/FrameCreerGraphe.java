@@ -19,8 +19,8 @@ public class FrameCreerGraphe extends JFrame
         this.setLayout(new BorderLayout());
 
         // Panel Formulaire
-        this.panelFormulaire = new PanelFormulaire(ctrl);
-        this.panelGraphe = new PanelGraphe(ctrl);
+        this.panelFormulaire = new PanelFormulaire(this, ctrl);
+        this.panelGraphe = new PanelGraphe(this, ctrl);
 
         // Ajout du panel à la frame
         this.add(this.panelFormulaire, BorderLayout.WEST);
@@ -29,5 +29,10 @@ public class FrameCreerGraphe extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setVisible(true);
+    }
+
+    public void majIHM() 
+    {
+        this.panelGraphe.repaint();
     }
 }

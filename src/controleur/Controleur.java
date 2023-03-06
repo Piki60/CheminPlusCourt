@@ -58,7 +58,5 @@ public class Controleur
     {
         metier.modifierArete(n1, n2, cout);
     }
-
-
-    
+   
 }
