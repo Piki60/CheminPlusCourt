@@ -44,14 +44,9 @@ public class Controleur
         new Controleur();
     }
 
-    public void setPositionNoeud(Integer idNoeudDrag, int x, int y) 
+    public void modifierNoeud(char id, int x, int y) 
     {
-        metier.setPositionNoeud(idNoeudDrag, x, y);
-    }
-
-    public void modifierNoeud(int x, int y) 
-    {
-        metier.modifierNoeud(x, y);
+        metier.modifierNoeud(id, x, y);
     }
 
     public void modifierArete(Noeud n1, Noeud n2, int cout) 

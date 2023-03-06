@@ -30,7 +30,7 @@ import controleur.Controleur;
 import metier.Arete;
 import metier.Noeud;
 
-public class PanelFormulaire extends JPanel implements ActionListener, ListSelectionListener
+public class PanelFormulaire extends JPanel implements ActionListener
 {
         private Controleur ctrl;
         private JPanel panelNoeuds;
@@ -38,14 +38,13 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         private JPanel panelBtn;
         private List<Noeud> lstNoeuds;
         private List<Arete> lstAretes;
-        private boolean isNoeudSelected = false;
-        private boolean isAreteSelected = false;
 
         private JLabel      lblX;
         private JLabel      lblY;
         private JTextField  txtX;
         private JTextField  txtY;
         private JButton     btnAjouterNoeud;
+        private JButton     btnModifierNoeud;
         private JButton     btnSupprimerNoeud;
         private JList<Noeud>       listNoeuds;
         private DefaultListModel<Noeud> listModelNoeuds;
@@ -95,6 +94,10 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
         this.btnAjouterNoeud = new JButton("Ajouter un noeud");
         this.btnAjouterNoeud.setBackground(new Color(0, 151, 178));
+
+        this.btnModifierNoeud = new JButton("Modifier un noeud");
+        this.btnModifierNoeud.setEnabled(false);
+        this.btnModifierNoeud.setBackground(new Color(0, 151, 178));
         
         this.btnSupprimerNoeud = new JButton("Supprimer un noeud");
         this.btnSupprimerNoeud.setBackground(new Color(0, 151, 178));
@@ -126,10 +129,11 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         hGroup.addGroup(layout.createParallelGroup().
                 addComponent(this.txtX).
                 addComponent(this.txtY).
-                addComponent(this.btnSupprimerNoeud));
+                addComponent(this.btnModifierNoeud));
 
         hGroup.addGroup(layout.createParallelGroup().
-                addComponent(this.scrollPaneNoeuds));
+                addComponent(this.scrollPaneNoeuds)
+                .addComponent(this.btnSupprimerNoeud));
         
         layout.setHorizontalGroup(hGroup);
 
@@ -144,7 +148,9 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 .addComponent(this.scrollPaneNoeuds));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.btnAjouterNoeud).
+                addComponent(this.btnModifierNoeud).
                 addComponent(this.btnSupprimerNoeud));
+
         layout.setVerticalGroup(vGroup);
 
 
@@ -207,7 +213,8 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 addComponent(this.btnSupprimerArete));
         
         hGroup2.addGroup(layout2.createParallelGroup().
-                addComponent(this.scrollPaneAretes));
+                addComponent(this.scrollPaneAretes)
+                );
         
         layout2.setHorizontalGroup(hGroup2);
 
@@ -260,10 +267,9 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         this.btnAjouterArete.addActionListener(this);
         this.btnSupprimerNoeud.addActionListener(this);
         this.btnSupprimerArete.addActionListener(this);
+        this.btnModifierNoeud.addActionListener(this);
         this.btnSauvegarder.addActionListener(this);
         this.btnCheminCourt.addActionListener(this);
-        this.listNoeuds.addListSelectionListener(this);
-        this.listAretes.addListSelectionListener(this);
     }
 
 
@@ -281,15 +287,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 int x = Integer.parseInt(this.txtX.getText());
                                 int y = Integer.parseInt(this.txtY.getText());
 
-                                if(isNoeudSelected)
-                                {
-                                        this.ctrl.modifierNoeud(x, y);
-                                        isNoeudSelected = false;
-                                }
-                                else
-                                {
-                                        this.ctrl.ajouterNoeud(x, y);
-                                }
+                                this.ctrl.ajouterNoeud(x, y);                                
 
                                 this.txtX.setText("");
                                 this.txtY.setText("");
@@ -319,15 +317,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                         }
                                 }
 
-                                if(isAreteSelected)
-                                {
-                                        this.ctrl.modifierArete(n1, n2, cout);
-                                        isAreteSelected = false;
-                                }
-                                else
-                                {
-                                        this.ctrl.ajouterArete(n1, n2, cout);
-                                }
+                                this.ctrl.ajouterArete(n1, n2, cout);                               
 
                                 this.txtCout.setText("");
                                 this.comboNoeud1.setSelectedIndex(-1);
@@ -537,25 +527,5 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 
         }
 
-        @Override
-        public void valueChanged(ListSelectionEvent e) 
-        {
-                if(e.getSource() == this.listNoeuds)
-                {
-                        
-                        this.txtX.setText(String.valueOf(((Noeud) this.listNoeuds.getSelectedValue()).getX()));
-                        this.txtY.setText(String.valueOf(((Noeud) this.listNoeuds.getSelectedValue()).getY()));
-
-                        this.isNoeudSelected = true;
-                        
-                }
-                else if(e.getSource() == this.listAretes)
-                {
-                        this.btnSupprimerArete.setEnabled(true);
-                        this.txtCout.setText(String.valueOf(((Arete) this.listAretes.getSelectedValue()).getCout()));
-                        this.comboNoeud1.setSelectedItem(((Arete) this.listAretes.getSelectedValue()).getNoeud1());
-                        this.comboNoeud2.setSelectedItem(((Arete) this.listAretes.getSelectedValue()).getNoeud2());
-
-                }
-        }
+       
 }

@@ -199,17 +199,7 @@ public class Metier
         return null;
     }
 
-    public void setPositionNoeud(Integer idNoeudDrag, int x, int y) 
-    {
-        for (Noeud n : alNoeuds)
-            if (n.getId() == idNoeudDrag)
-            {
-                n.setX(x);
-                n.setY(y);
-            }
-    }
-
-    public void modifierNoeud(int x, int y) 
+    public void modifierNoeud(char id, int x, int y) 
     {
         for (Noeud n : alNoeuds)
             if (n.getX() == x && n.getY() == y)
