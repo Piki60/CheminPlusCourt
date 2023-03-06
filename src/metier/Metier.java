@@ -203,4 +203,23 @@ public class Metier
                 n.setY(y);
             }
     }
+
+    public void modifierNoeud(int x, int y) 
+    {
+        for (Noeud n : alNoeuds)
+            if (n.getX() == x && n.getY() == y)
+            {
+                n.setX(x);
+                n.setY(y);
+            }
+    }
+
+    public void modifierArete(Noeud n1, Noeud n2, int cout) 
+    {
+        for (Arete a : alAretes)
+            if (a.getNoeud1().getId() == n1.getId() && a.getNoeud2().getId() == n2.getId())
+            {
+                a.setCout(cout);
+            }
+    }
 }
