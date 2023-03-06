@@ -202,7 +202,7 @@ public class Metier
     public void modifierNoeud(char id, int x, int y) 
     {
         for (Noeud n : alNoeuds)
-            if (n.getX() == x && n.getY() == y)
+            if (n.getId() == id)
             {
                 n.setX(x);
                 n.setY(y);
