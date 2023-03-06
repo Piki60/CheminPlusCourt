@@ -1,19 +1,15 @@
 package ihm;
 
-import metier.Arete;
-import metier.Noeud;
-import controleur.Controleur;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.util.List;
 
-import javax.print.attribute.standard.DialogTypeSelection;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -26,12 +22,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import java.io.File; 
-import java.io.IOException;
+import controleur.Controleur;
+import metier.Arete;
+import metier.Noeud;
 
-public class PanelFormulaire extends JPanel implements ActionListener
+public class PanelFormulaire extends JPanel implements ActionListener, ListSelectionListener
 {
         private Controleur ctrl;
         private JPanel panelNoeuds;
@@ -39,6 +38,8 @@ public class PanelFormulaire extends JPanel implements ActionListener
         private JPanel panelBtn;
         private List<Noeud> lstNoeuds;
         private List<Arete> lstAretes;
+        private boolean isNoeudSelected = false;
+        private boolean isAreteSelected = false;
 
         private JLabel      lblX;
         private JLabel      lblY;
@@ -72,8 +73,8 @@ public class PanelFormulaire extends JPanel implements ActionListener
         this.setBackground(new Color(216,216,216));
         this.setLayout(new GridLayout(5,1));
 
-        this.lstNoeuds = this.ctrl.getMetier().getAlNoeuds();      
-        this.lstAretes = this.ctrl.getMetier().getAlAretes();  
+        this.lstNoeuds = this.ctrl.getAlNoeuds();      
+        this.lstAretes = this.ctrl.getAlAretes();  
 
         // Panel Noeuds
         this.panelNoeuds = new JPanel();
@@ -110,8 +111,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
         
         this.scrollPaneNoeuds = new JScrollPane(this.listNoeuds);
         this.scrollPaneNoeuds.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        this.scrollPaneNoeuds.setSize(200,200);
-        this.scrollPaneNoeuds.setPreferredSize(new Dimension(200,200));
+        this.scrollPaneNoeuds.setPreferredSize(new java.awt.Dimension(200, 500));
 
         // Ajout des composants au panel Noeuds
         layout.setAutoCreateGaps(true);
@@ -186,8 +186,8 @@ public class PanelFormulaire extends JPanel implements ActionListener
         
         this.scrollPaneAretes = new JScrollPane(this.listAretes);
         this.scrollPaneAretes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        this.scrollPaneAretes.setSize(200,200);
-        this.scrollPaneAretes.setPreferredSize(new Dimension(200,200));
+        this.scrollPaneAretes.setPreferredSize(new java.awt.Dimension(200, 500));
+        
 
         // Ajout des composants au panel Aretes
         layout2.setAutoCreateGaps(true);
@@ -258,8 +258,12 @@ public class PanelFormulaire extends JPanel implements ActionListener
         // Ajout des listeners
         this.btnAjouterNoeud.addActionListener(this);
         this.btnAjouterArete.addActionListener(this);
+        this.btnSupprimerNoeud.addActionListener(this);
+        this.btnSupprimerArete.addActionListener(this);
         this.btnSauvegarder.addActionListener(this);
         this.btnCheminCourt.addActionListener(this);
+        this.listNoeuds.addListSelectionListener(this);
+        this.listAretes.addListSelectionListener(this);
     }
 
 
@@ -276,10 +280,21 @@ public class PanelFormulaire extends JPanel implements ActionListener
                         {
                                 int x = Integer.parseInt(this.txtX.getText());
                                 int y = Integer.parseInt(this.txtY.getText());
-                                this.ctrl.ajouterNoeud(x, y);
+
+                                if(isNoeudSelected)
+                                {
+                                        this.ctrl.modifierNoeud(x, y);
+                                        isNoeudSelected = false;
+                                }
+                                else
+                                {
+                                        this.ctrl.ajouterNoeud(x, y);
+                                }
+
                                 this.txtX.setText("");
                                 this.txtY.setText("");
                                 this.majIHM();
+
                         }
                 }
                 else if(e.getSource() == this.btnAjouterArete)
@@ -293,10 +308,31 @@ public class PanelFormulaire extends JPanel implements ActionListener
                                 Noeud n1 = (Noeud) this.comboNoeud1.getSelectedItem();
                                 Noeud n2 = (Noeud) this.comboNoeud2.getSelectedItem();
                                 int cout = Integer.parseInt(this.txtCout.getText());
-                                this.ctrl.ajouterArete(n1, n2, cout);
-                                this.comboNoeud1.setSelectedItem(1);
-                                this.comboNoeud2.setSelectedItem(1);
+                                
+
+                                for ( Arete a : this.lstAretes )
+                                {
+                                        if ( a.getNoeud1() == n1 && a.getNoeud2() == n2 )
+                                        {
+                                                JOptionPane.showMessageDialog(null, "L'arete existe déjà", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                                return;
+                                        }
+                                }
+
+                                if(isAreteSelected)
+                                {
+                                        this.ctrl.modifierArete(n1, n2, cout);
+                                        isAreteSelected = false;
+                                }
+                                else
+                                {
+                                        this.ctrl.ajouterArete(n1, n2, cout);
+                                }
+
                                 this.txtCout.setText("");
+                                this.comboNoeud1.setSelectedIndex(-1);
+                                this.comboNoeud2.setSelectedIndex(-1);
+
                                 this.majIHM();
                         }
                 }
@@ -309,6 +345,15 @@ public class PanelFormulaire extends JPanel implements ActionListener
                         else
                         {
                                 Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
+
+                                for ( Arete a : this.lstAretes )
+                                {
+                                        if ( a.getNoeud1() == n || a.getNoeud2() == n )
+                                        {
+                                                this.ctrl.supprimerArete(a);
+                                        }
+                                }
+
                                 this.ctrl.supprimerNoeud(n);
                                 this.majIHM();
                         }
@@ -328,37 +373,41 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
                 else if(e.getSource() == this.btnSauvegarder)
                 {
-                        //sauvegarder dans un fichier
-                       JDialog dialog = new JDialog();
-
                         JFileChooser fileChooser = new JFileChooser();
-                        fileChooser.setDialogTitle("Sauvegarder");
-                        
-                        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml");
-                        fileChooser.setFileFilter(filter);
-                        fileChooser.setApproveButtonText("Sauvegarder");
-                        fileChooser.setApproveButtonToolTipText("Sauvegarder");
+                        fileChooser.setDialogTitle("Sauvegarder le graphe");
+                        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                        fileChooser.setAcceptAllFileFilterUsed(false);
+                        fileChooser.setFileFilter(new FileNameExtensionFilter("Fichier XML", "xml"));
 
-                        int userSelection = fileChooser.showSaveDialog(dialog);
-                        
+                        int userSelection = fileChooser.showSaveDialog(this);
+
                         if (userSelection == JFileChooser.APPROVE_OPTION) 
                         {
                                 File fileToSave = fileChooser.getSelectedFile();
-                                System.out.println("Enregistrer sous: " + fileToSave.getAbsolutePath());
-                                this.ctrl.ecrireXML(fileToSave);
+                                this.ctrl.sauvegarder(fileToSave);
                         }
-
+                        
                 }
                 else if(e.getSource() == this.btnCheminCourt)
                 {
+                        if ( this.lstNoeuds.size() == 0 )
+                        {
+                                JOptionPane.showMessageDialog(null, "Veuillez ajouter des noeuds", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+                        else if ( this.lstAretes.size() == 0 )
+                        {
+                                JOptionPane.showMessageDialog(null, "Veuillez ajouter des arêtes", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
                         
+                        DialogCheminCourt dialog = new DialogCheminCourt();                        
                 }
         }
 
 
         private void majIHM() 
         {
-                // Mise à jour de la liste des noeuds
                 this.listModelNoeuds.removeAllElements();
                 for (int i = 0; i < this.lstNoeuds.size(); i++)
                 {
@@ -366,7 +415,6 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
                 this.listNoeuds.setModel(this.listModelNoeuds);
 
-                // Mise à jour de la liste des arêtes
                 this.listModelAretes.removeAllElements();
                 for (int i = 0; i < this.lstAretes.size(); i++)
                 {
@@ -374,7 +422,6 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
                 this.listAretes.setModel(this.listModelAretes);
 
-                // Mise à jour des combobox
                 this.comboNoeud1.removeAllItems();
                 this.comboNoeud2.removeAllItems();
 
@@ -385,6 +432,7 @@ public class PanelFormulaire extends JPanel implements ActionListener
                 }
 
                 this.repaint();
+                
         }
                
 
@@ -399,6 +447,101 @@ public class PanelFormulaire extends JPanel implements ActionListener
                         {
                                 e.consume();
                         }
+                }
+        }
+
+        private class DialogCheminCourt extends JDialog implements ActionListener
+        {
+                private JComboBox comboNoeud1;
+
+                private JButton btnValider;
+                private JButton btnAnnuler;
+
+                public DialogCheminCourt()
+                {
+                        Dimension dim = new Dimension (350, 150);
+
+                        this.setTitle("Chemin le plus court");
+                        this.setSize(dim);
+                        this.setLocationRelativeTo(null);
+                        this.setResizable(false);
+                        this.setLayout(null);
+                        this.setVisible(true);
+
+                        //creation des composants
+                        JLabel labelNoeud = new JLabel("Noeud de départ : ");
+
+                        this.comboNoeud1 = PanelFormulaire.this.comboNoeud1;
+
+                        this.btnValider = new JButton("Valider");
+                        this.btnAnnuler = new JButton("Annuler");
+
+                        //positionnement des composants
+
+                        labelNoeud.setBounds(10, 20, 150, 20);
+                        this.comboNoeud1.setBounds(160, 20, 150, 20);
+
+                        this.btnValider.setBounds(10, 60, 150, 20);
+                        this.btnAnnuler.setBounds(160, 60, 150, 20);
+                        
+                        //ajout des composants
+
+                        this.add(labelNoeud);
+                        this.add(this.comboNoeud1);
+
+                        this.add(this.btnValider);
+                        this.add(this.btnAnnuler);
+
+                        //ajout des listeners
+
+                        this.btnValider.addActionListener(this);
+                        this.btnAnnuler.addActionListener(this);                                   
+                        
+                }
+
+                public void actionPerformed(ActionEvent e) 
+                {
+                        if(e.getSource() == this.btnValider)
+                        {
+                                if(this.comboNoeud1.getSelectedIndex() == -1)
+                                {
+                                        JOptionPane.showMessageDialog(null, "Veuillez sélectionner un noeud", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                }
+                                else
+                                {
+                                        Noeud n = (Noeud) this.comboNoeud1.getSelectedItem();
+                                        System.out.println(n.toString());
+                                        //ctrl.cheminLePlusCourt(n);
+                                }
+                        }
+                        else if(e.getSource() == this.btnAnnuler)
+                        {
+                                this.dispose();
+                        }
+                }
+
+                
+        }
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) 
+        {
+                if(e.getSource() == this.listNoeuds)
+                {
+                        
+                        this.txtX.setText(String.valueOf(((Noeud) this.listNoeuds.getSelectedValue()).getX()));
+                        this.txtY.setText(String.valueOf(((Noeud) this.listNoeuds.getSelectedValue()).getY()));
+
+                        this.isNoeudSelected = true;
+                        
+                }
+                else if(e.getSource() == this.listAretes)
+                {
+                        this.btnSupprimerArete.setEnabled(true);
+                        this.txtCout.setText(String.valueOf(((Arete) this.listAretes.getSelectedValue()).getCout()));
+                        this.comboNoeud1.setSelectedItem(((Arete) this.listAretes.getSelectedValue()).getNoeud1());
+                        this.comboNoeud2.setSelectedItem(((Arete) this.listAretes.getSelectedValue()).getNoeud2());
+
                 }
         }
 }
