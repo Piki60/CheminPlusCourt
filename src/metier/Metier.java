@@ -86,12 +86,13 @@ public class Metier
 
         xml += "<graphe>\n";
         xml += tab + "<noeuds>\n";
+        tab += "\t";
 
         for(Noeud n : alNoeuds)
         {
-            xml += tab + tab + "<noeud id=\"" + n.getId() + "\"> \n";
-            tab += "\t";
+            xml += tab + "<noeud id=\"" + n.getId() + "\"> \n";
 
+            tab += "\t";
             xml += tab + "<x>" + n.getX() + "</x>\n";
             xml += tab + "<y>" + n.getY() + "</y>\n";
 
@@ -100,13 +101,16 @@ public class Metier
             xml += tab + "</noeud>\n";
         }
 
-        xml += tab + "</noeuds>\n";
+        tab = tab.substring(0, tab.length() - 1);
+        xml += tab + "</noeuds>\n\n";
 
         xml += tab + "<aretes>\n";
 
+        tab += "\t";
+
         for(Arete a : alAretes)
         {
-            xml += tab + tab + "<arete id=\"" + a.getId() + "\"> \n";
+            xml += tab + "<arete id=\"" + a.getId() + "\"> \n";
             tab += "\t";
 
             xml += tab + "<noeud1>" + a.getNoeud1().getId() + "</noeud1>\n";
@@ -118,6 +122,7 @@ public class Metier
             xml += tab + "</arete>\n";
         }
 
+        tab = tab.substring(0, tab.length() - 1);
         xml += tab + "</aretes>\n";
 
         xml += "</graphe>\n";
