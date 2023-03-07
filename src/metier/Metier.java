@@ -16,6 +16,7 @@ public class Metier
 {
     private List<Noeud> alNoeuds; 
     private List<Arete> alAretes;
+    private Noeud noeudSelectionne;
     
     public Metier()
     {
@@ -225,5 +226,15 @@ public class Metier
                 return;
             }
         }
+    }
+
+    public void setPosNoeud(Noeud selectedNode, int startX, int startY) 
+    {
+        for (Noeud n : alNoeuds)
+            if (n.getId() == selectedNode.getId())
+            {
+                n.setX(startX);
+                n.setY(startY);
+            }
     }
 }

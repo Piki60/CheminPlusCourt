@@ -53,5 +53,11 @@ public class Controleur
     {
         metier.modifierArete(id, nouveauCout);
     }
+
+
+    public void setPosNoeud(Noeud selectedNode, int startX, int startY) 
+    {
+        metier.setPosNoeud(selectedNode, startX, startY);
+    }
    
 }
