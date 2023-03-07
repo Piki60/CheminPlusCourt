@@ -331,6 +331,12 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 Noeud n1 = (Noeud) this.comboNoeud1.getSelectedItem();
                                 Noeud n2 = (Noeud) this.comboNoeud2.getSelectedItem();
                                 int cout = Integer.parseInt(this.txtCout.getText());
+
+                                if (n1 == n2)
+                                {
+                                        JOptionPane.showMessageDialog(null, "Vous ne pouvez pas créer une arete entre le même noeud", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                }
                                 
 
                                 for ( Arete a : this.lstAretes )
@@ -652,7 +658,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 {
                                         Noeud n = (Noeud) this.combo.getSelectedItem();
                                         System.out.println(n.toString());
-                                        //ctrl.cheminLePlusCourt(n);
+                                        ctrl.cheminLePlusCourt(n);
                                 }
                         }
                         else if(e.getSource() == this.btnAnnuler)

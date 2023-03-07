@@ -65,9 +65,9 @@ public class Metier
                 alAretes.remove(i);
                 i--;
             }
-
-            alNoeuds.remove(n);
         }
+
+        alNoeuds.remove(n);
 
         return true;
 
@@ -236,5 +236,10 @@ public class Metier
                 n.setX(startX);
                 n.setY(startY);
             }
+    }
+
+    public void cheminLePlusCourt(Noeud n)
+    {
+        
     }
 }

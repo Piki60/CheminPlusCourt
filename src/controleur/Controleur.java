@@ -20,44 +20,44 @@ public class Controleur
         this.ihm = new FrameAccueil(this);
     }
 
-    public void sauvegarder(File file) { metier.ecrireXML(file);}
-    public void lireXML  (File file) { metier.lireXML  (file);}
+    //XML
+    public void sauvegarder (File file) { metier.ecrireXML(file);}
+    public void lireXML     (File file) { metier.lireXML  (file);}
 
-    public void ajouterNoeud(int x, int y)
-    {
-        metier.ajouterNoeud(new Noeud(x, y));
-    }
+    //Noeud
+    public void ajouterNoeud    (int x, int y )         { metier.ajouterNoeud(new Noeud(x, y)); }
+    public void modifierNoeud   (char id, int x, int y) { metier.modifierNoeud(id, x, y); }
+    public void supprimerNoeud  (Noeud noeud)           { metier.supprimerNoeud(noeud); }
 
-    public void ajouterArete(Noeud noeud1, Noeud noeud2, int cout)
-    {
-        metier.ajouterArete(new Arete(noeud1, noeud2, cout));
-    }
+    //Arete
+    public void ajouterArete    (Noeud noeud1, Noeud noeud2, int cout) { metier.ajouterArete(new Arete(noeud1, noeud2, cout));}    
+    public void modifierArete   (int id, int nouveauCout)              { metier.modifierArete(id, nouveauCout);  }
+    public void supprimerArete  (Arete arete)                          { metier.supprimerArete(arete); }
 
-    public void supprimerNoeud(Noeud noeud) { metier.supprimerNoeud(noeud); }
-    public void supprimerArete(Arete arete) { metier.supprimerArete(arete); }
-
+    //Getters
     public List<Noeud> getAlNoeuds() { return metier.getAlNoeuds(); }
     public List<Arete> getAlAretes() { return metier.getAlAretes(); }
+
+    public void setPosNoeud(Noeud selectedNode, int startX, int startY) 
+    {
+        metier.setPosNoeud(selectedNode, startX, startY);
+    }
+
+    public void cheminLePlusCourt(Noeud n)
+    {
+        metier.cheminLePlusCourt(n);
+    }
 
     public static void main(String[] args)
     {
         new Controleur();
     }
 
-    public void modifierNoeud(char id, int x, int y) 
-    {
-        metier.modifierNoeud(id, x, y);
-    }
+    
 
-    public void modifierArete(int id, int nouveauCout) 
-    {
-        metier.modifierArete(id, nouveauCout);
-    }
+   
 
 
-    public void setPosNoeud(Noeud selectedNode, int startX, int startY) 
-    {
-        metier.setPosNoeud(selectedNode, startX, startY);
-    }
+    
    
 }
