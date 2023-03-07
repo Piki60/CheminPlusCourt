@@ -2,8 +2,10 @@ package metier;
 
 public class Arete
 {
-    private static int id=0;
-    private int index = 0;
+    private static int idAretes=0;
+
+    private int id = 0;
+
     private Noeud noeud1;
     private Noeud noeud2;
     private int cout;
@@ -13,8 +15,8 @@ public class Arete
         this.noeud1 = noeud1;
         this.noeud2 = noeud2;
         this.cout = cout;
-        this.index++;
-        Arete.id = this.index;
+
+        this.id = idAretes++;
     }
 
     public int getId()
@@ -55,6 +57,6 @@ public class Arete
     @Override
     public String toString()
     {
-        return id + ":" + noeud1.getId() + " =>" + noeud2.getId() + " = " + cout;
+        return "Arête " + id + " : " + noeud1.getNom() + " =>" + noeud2.getNom() + " = " + cout;
     }
 }
