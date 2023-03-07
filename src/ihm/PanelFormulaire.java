@@ -43,8 +43,10 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         private List<Noeud> lstNoeuds;
         private List<Arete> lstAretes;
 
+        private JLabel      lblNom;
         private JLabel      lblX;
         private JLabel      lblY;
+        private JTextField  txtNom;
         private JTextField  txtX;
         private JTextField  txtY;
         private JButton     btnAjouterNoeud;
@@ -89,8 +91,19 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
 
         //Composants du panel Noeuds
+        this.lblNom = new JLabel("Nom :", JLabel.RIGHT);
         this.lblX = new JLabel("Position X :", JLabel.RIGHT);
         this.lblY = new JLabel("Position Y :", JLabel.RIGHT);
+
+        this.txtNom = new JTextField(10);
+        this.txtNom.addKeyListener(new KeyAdapter() 
+        {
+                public void keyTyped(KeyEvent e) 
+                {
+                        if (txtNom.getText().length() >= 1 || !Character.isLetter(e.getKeyChar()))
+                                e.consume();
+                }
+                });
 
         this.txtX = new JTextField(10);
         this.txtX.addKeyListener(new EntierTextField());
@@ -131,11 +144,13 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
         GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
         hGroup.addGroup(layout.createParallelGroup().
+                addComponent(this.lblNom).
                 addComponent(this.lblX).
                 addComponent(this.lblY).
                 addComponent(this.btnAjouterNoeud));
 
         hGroup.addGroup(layout.createParallelGroup().
+                addComponent(this.txtNom).
                 addComponent(this.txtX).
                 addComponent(this.txtY).
                 addComponent(this.btnModifierNoeud));
@@ -147,6 +162,10 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         layout.setHorizontalGroup(hGroup);
 
         GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
+                addComponent(this.lblNom).
+                addComponent(this.txtNom)
+                .addComponent(this.scrollPaneNoeuds));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblX).
                 addComponent(this.txtX)
@@ -303,17 +322,19 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         {
                 if(e.getSource() == this.btnAjouterNoeud)
                 {
-                        if(this.txtX.getText().equals("") || this.txtY.getText().equals(""))
+                        if(this.txtX.getText().equals("") || this.txtY.getText().equals("") || this.txtNom.getText().equals(""))
                         {
                                 JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
                         }
                         else
                         {
+                                char nom = this.txtNom.getText().charAt(0);     
                                 int x = Integer.parseInt(this.txtX.getText());
                                 int y = Integer.parseInt(this.txtY.getText());
 
-                                this.ctrl.ajouterNoeud(x, y);                                
+                                this.ctrl.ajouterNoeud(nom, x, y);                                
 
+                                this.txtNom.setText("");
                                 this.txtX.setText("");
                                 this.txtY.setText("");
                                 this.majIHM();
@@ -364,6 +385,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
                         this.ctrl.supprimerNoeud(n);
 
+                        this.txtNom.setText("");
                         this.txtX.setText("");
                         this.txtY.setText("");
 
@@ -434,11 +456,13 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 {
                         Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
 
+                        char newNom = this.txtNom.getText().charAt(0);
                         int newX = Integer.parseInt(this.txtX.getText());
                         int newY = Integer.parseInt(this.txtY.getText());
 
-                        this.ctrl.modifierNoeud(n.getId(), newX, newY);
+                        this.ctrl.modifierNoeud(n.getId(), newNom,  newX, newY);
 
+                        this.txtNom.setText("");
                         this.txtX.setText("");
                         this.txtY.setText("");
 
@@ -482,6 +506,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                         if(this.listNoeuds.getSelectedValue() != null)
                         {
                                 Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
+                                this.txtNom.setText(String.valueOf(n.getNom()));
                                 this.txtX.setText(String.valueOf(n.getX()));
                                 this.txtY.setText(String.valueOf(n.getY()));
 
@@ -549,6 +574,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                         {               
                                 PanelFormulaire.this.listNoeuds.clearSelection();
 
+                                PanelFormulaire.this.txtNom.setText("");
                                 PanelFormulaire.this.txtX.setText("");
                                 PanelFormulaire.this.txtY.setText("");
 
@@ -594,6 +620,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 }
         }
 
+
         private class DialogCheminCourt extends JDialog implements ActionListener
         {
                 private JComboBox<Noeud> combo;
@@ -614,6 +641,8 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
                         //creation des composants
                         JLabel labelNoeud = new JLabel("Noeud de départ : ");
+
+                        this.combo = new JComboBox<Noeud>();
 
                         for (int i = 0; i < lstNoeuds.size(); i++)
                         {

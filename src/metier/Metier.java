@@ -100,6 +100,7 @@ public class Metier
             xml += tab + "<noeud id=\"" + n.getId() + "\"> \n";
 
             tab += "\t";
+            xml += tab + "<nom>" + n.getNom() + "</nom>\n";
             xml += tab + "<x>" + n.getX() + "</x>\n";
             xml += tab + "<y>" + n.getY() + "</y>\n";
 
@@ -170,10 +171,12 @@ public class Metier
         for (Element noeud : noeuds.getChildren())
         {
             int id = Integer.parseInt(noeud.getAttributeValue("id"));
+
+            char nom = noeud.getChildText("nom").charAt(0);
             int x = Integer.parseInt(noeud.getChildText("x"));
             int y = Integer.parseInt(noeud.getChildText("y"));
 
-            ajouterNoeud(new Noeud(x, y));
+            ajouterNoeud(new Noeud(nom, x, y));
 
             mapNoeuds.put(id, getNoeud(id));
             
@@ -206,11 +209,12 @@ public class Metier
         return null;
     }
 
-    public void modifierNoeud(char id, int x, int y) 
+    public void modifierNoeud(int id, char nom, int x, int y) 
     {
         for (Noeud n : alNoeuds)
             if (n.getId() == id)
             {
+                n.setNom(nom);
                 n.setX(x);
                 n.setY(y);
             }
@@ -240,6 +244,36 @@ public class Metier
 
     public void cheminLePlusCourt(Noeud n)
     {
-        
+        //implementation de l'algorithme de Bellman-Ford
+
+        int[] distance = new int[alNoeuds.size()];
+
+        distance[n.getId()] = 0;
+        for (int i = 0; i < alNoeuds.size(); i++)
+        {
+            if (i != n.getId())
+                distance[i] = Integer.MAX_VALUE;
+        }
+
+        /*for (int i = 0; i < alNoeuds.size() - 1; i++)
+        {
+            for (Arete a : alAretes)
+            {
+                if (distance[a.getNoeud1().getId()] + a.getCout() < distance[a.getNoeud2().getId()])
+                    distance[a.getNoeud2().getId()] = distance[a.getNoeud1().getId()] + a.getCout();
+            }
+        }*/
+
+        this.afficherTableau(distance);
+
     }
+
+    public void afficherTableau(int[] t)
+    {
+        for (int i = 0; i < t.length; i++)
+        {
+            System.out.println("distance[" + i + "] = " + t[i]);
+        }
+    }
+
 }

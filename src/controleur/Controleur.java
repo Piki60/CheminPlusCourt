@@ -25,8 +25,8 @@ public class Controleur
     public void lireXML     (File file) { metier.lireXML  (file);}
 
     //Noeud
-    public void ajouterNoeud    (int x, int y )         { metier.ajouterNoeud(new Noeud(x, y)); }
-    public void modifierNoeud   (char id, int x, int y) { metier.modifierNoeud(id, x, y); }
+    public void ajouterNoeud    (char nom,int x, int y )         { metier.ajouterNoeud(new Noeud(nom, x, y)); }
+    public void modifierNoeud   (int id, char nom, int x, int y) { metier.modifierNoeud(id, nom, x, y); }
     public void supprimerNoeud  (Noeud noeud)           { metier.supprimerNoeud(noeud); }
 
     //Arete

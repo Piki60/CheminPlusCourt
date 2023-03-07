@@ -2,15 +2,19 @@ package metier;
 
 public class Noeud 
 {
-    private static char idNoeuds = 'A';
+    private static int idNoeuds = 0;
 
-    private char id; 
+    private int id;
+    
+    private char nom; 
 
     private int x;
     private int y;
 
-    public Noeud(int x, int y) 
+    public Noeud(char nom, int x, int y) 
     {
+        this.nom = nom;
+
         this.x = x;
         this.y = y;
 
@@ -19,19 +23,21 @@ public class Noeud
 
     // Getters
 
-    public char getId   () { return id;}
+    public int getId   () { return id;}
+    public char getNom () { return nom; }
     public int  getX    () { return x; }
     public int  getY    () { return y; }
 
     // Setters
 
+    public void setNom(char nom) { this.nom = nom; }
     public void setX(int x) { this.x = x; }
     public void setY(int y) { this.y = y; }
 
 
     public String toString() 
     {
-        return "Noeud " + id + " (" + x + "; " + y + ")";
+        return "Noeud " + nom + " (" + x + "; " + y + ")";
     }
 
 }

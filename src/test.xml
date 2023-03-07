@@ -1,30 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <graphe>
 	<noeuds>
-		<noeud id="A"> 
-			<x>10</x>
-			<y>50</y>
-		</noeud>
-		<noeud id="B"> 
+		<noeud id="0"> 
+			<nom>A</nom>
 			<x>20</x>
-			<y>0</y>
+			<y>20</y>
 		</noeud>
-		<noeud id="C"> 
-			<x>20</x>
-			<y>80</y>
+		<noeud id="1"> 
+			<nom>H</nom>
+			<x>555</x>
+			<y>555</y>
+		</noeud>
+		<noeud id="2"> 
+			<nom>I</nom>
+			<x>70</x>
+			<y>100</y>
+		</noeud>
+		<noeud id="3"> 
+			<nom>K</nom>
+			<x>100</x>
+			<y>400</y>
+		</noeud>
+		<noeud id="4"> 
+			<nom>M</nom>
+			<x>700</x>
+			<y>200</y>
 		</noeud>
 	</noeuds>
 
 	<aretes>
-		<arete id="2"> 
-			<noeud1>A</noeud1>
-			<noeud2>A</noeud2>
-			<cout>5</cout>
+		<arete id="1"> 
+			<noeud1>0</noeud1>
+			<noeud2>1</noeud2>
+			<cout>20</cout>
 		</arete>
-		<arete id="2"> 
-			<noeud1>A</noeud1>
-			<noeud2>B</noeud2>
-			<cout>4</cout>
+		<arete id="1"> 
+			<noeud1>0</noeud1>
+			<noeud2>2</noeud2>
+			<cout>2</cout>
+		</arete>
+		<arete id="1"> 
+			<noeud1>0</noeud1>
+			<noeud2>3</noeud2>
+			<cout>2</cout>
+		</arete>
+		<arete id="1"> 
+			<noeud1>2</noeud1>
+			<noeud2>1</noeud2>
+			<cout>20</cout>
+		</arete>
+		<arete id="1"> 
+			<noeud1>4</noeud1>
+			<noeud2>2</noeud2>
+			<cout>5</cout>
 		</arete>
 	</aretes>
 </graphe>
