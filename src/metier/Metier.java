@@ -56,14 +56,20 @@ public class Metier
         if (n == null || !alNoeuds.contains(n))
             return false;
 
-        for (Arete a : alAretes)
+        for (int i = 0; i < alAretes.size(); i++) 
         {
-            if (a.getNoeud1().getId() == n.getId() || a.getNoeud2().getId() == n.getId())
-                alAretes.remove(a);
+            Arete a = alAretes.get(i);
+            if (a.getNoeud1() == n || a.getNoeud2() == n) 
+            {
+                alAretes.remove(i);
+                i--;
+            }
+
+            alNoeuds.remove(n);
         }
 
-        alNoeuds.remove(n);
         return true;
+
     }
 
     public boolean supprimerArete(Arete a)
