@@ -33,6 +33,6 @@ public class FrameCreerGraphe extends JFrame
 
     public void majIHM() 
     {
-        this.panelGraphe.repaint();
+        this.panelGraphe.majIHM();
     }
 }

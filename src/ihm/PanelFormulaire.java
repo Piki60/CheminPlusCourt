@@ -479,7 +479,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 }
 
                 this.repaint();
-                //this.frame.majIHM();
+                this.frame.majIHM();
                 
         }
 

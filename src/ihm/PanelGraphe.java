@@ -5,14 +5,15 @@ import java.awt.Graphics;
 import java.awt.geom.Ellipse2D;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
 import controleur.Controleur;
 import metier.Arete;
 import metier.Noeud;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+
 
 public class PanelGraphe extends JPanel implements MouseListener
 {
@@ -20,10 +21,11 @@ public class PanelGraphe extends JPanel implements MouseListener
     private FrameCreerGraphe frame;
     private List<Noeud> lstNoeuds;
     private List<Arete> lstAretes;
-    private Ellipse2D[]   noeuds;
 
-    private Noeud selectionNoeud;
     private int idNoeudDrag;
+
+    private int startX;
+    private int startY;
 
     public PanelGraphe(FrameCreerGraphe frame, Controleur ctrl)
     {
@@ -33,8 +35,9 @@ public class PanelGraphe extends JPanel implements MouseListener
         this.setBackground(new Color(216,216,216));
         
         this.initComponent();
+        this.add(new JLabel("Coucou"));
 
-        this.noeuds.addMouseListener(this);
+        this.addMouseListener(this);
 
     }
 
@@ -42,15 +45,11 @@ public class PanelGraphe extends JPanel implements MouseListener
     {
         this.lstNoeuds = ctrl.getAlNoeuds();
         this.lstAretes = ctrl.getAlAretes();
-
-        this.noeuds = new Ellipse2D[this.lstNoeuds.size()];
-
     }
 
     public void paint(Graphics g)
     {
         super.paint(g);
-        this.dessinerNoeuds(g);
         this.dessinerAretes(g);
         this.dessinerNoeuds(g);
     }
@@ -69,89 +68,70 @@ public class PanelGraphe extends JPanel implements MouseListener
     {
         for (Noeud n : lstNoeuds)
         {
-            if (n == selectionNoeud)
-            {
-                g.setColor(new Color(0, 151, 178));
-            }
-            else
-            {
-                g.setColor(new Color(0, 151, 178));
-            }
+            g.setColor(new Color(0, 151, 178));
             g.fillOval(n.getX(), n.getY(), 20, 20);
             g.setColor(Color.BLACK);
             g.drawString(n.getId()+"", n.getX()+7, n.getY()+15);
-            this.noeuds[this.lstNoeuds.indexOf(n)] = new Ellipse2D.Double(n.getX(), n.getY(), 20, 20);
         }
     }   
 
-    public void setSelectionNoeud(Noeud selectionNoeud) 
-    {
-        this.selectionNoeud = selectionNoeud;
-    }
-
-    public Noeud getSelectionNoeud() 
-    {
-        return selectionNoeud;
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
-    }
-
     @Override
     public void mousePressed(MouseEvent e) {
-        if (SwingUtilities.isLeftMouseButton(e))
-		{
-			for (int i = 0 ; i < this.noeuds.length ; i++)
-				if (this.noeuds[i].contains(e.getPoint()))
-				{
-					this.idNoeudDrag = i;
-					this.ctrl.selectNoeud(i);
-				}
 
-			for (int i = 0 ; i < this.tabNomNoeud.length ; i++)
-				if (this.tabNomNoeud[i].contains(e.getPoint()))
-				{
-					this.idNomNoeudDrag = i;
-					this.ctrl.selectNoeud(i);
-				}
-		}
-
-		if (SwingUtilities.isRightMouseButton(e))
-		{
-			released = false;
-			startPoint = MouseInfo.getPointerInfo().getLocation();
-		}
+        
     }
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        if (SwingUtilities.isLeftMouseButton(e))
-		{
-			this.idNoeudDrag = null;
-			this.idNomNoeudDrag = null;
-		}
-			
+    public void mouseClicked(MouseEvent e) 
+    {
+        // Si le clic est sur un nœud, enregistrez l'index et les coordonnées
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+        for (int i = 0; i < this.lstNoeuds.size(); i++) {
+            Noeud node = this.lstNoeuds.get(i);
+            if (mouseX >= node.getX() && mouseX <= node.getX()
+                    && mouseY >= node.getY() && mouseY <= node.getY()) {
+                idNoeudDrag = i;
+                startX = mouseX;
+                startY = mouseY;
+                break;
+            }
+        }
+           
+    }
 
-		if (SwingUtilities.isRightMouseButton(e))
-		{
-			released = true;
-			repaint();
-		}
+    public void mouseDragged(MouseEvent e) {
+        // Si un nœud est sélectionné, mettez à jour ses coordonnées en fonction du déplacement de la souris
+        if (idNoeudDrag >= 0) {
+            int deltaX = e.getX() - startX;
+            int deltaY = e.getY() - startY;
+            Noeud selectedNode = this.lstNoeuds.get(idNoeudDrag);
+            selectedNode.setX(selectedNode.getX() + deltaX);
+            selectedNode.setY(selectedNode.getY() + deltaY);
+            startX = e.getX();
+            startY = e.getY();
+             // Redessiner le panel avec les nouvelles positions des nœuds
+            this.ctrl.setPosNoeud(selectedNode, startX, startY);
+            repaint();
+        }
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void majIHM() 
+    {
+        this.repaint();
+        this.revalidate();
+        this.repaint();
     }
 }
 
