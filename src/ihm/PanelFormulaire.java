@@ -342,14 +342,6 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                         
                         Noeud n = (Noeud) this.listNoeuds.getSelectedValue();
 
-                        for ( Arete a : this.lstAretes )
-                        {
-                                if ( a.getNoeud1() == n || a.getNoeud2() == n )
-                                {
-                                        this.ctrl.supprimerArete(a);
-                                }
-                        }
-
                         this.ctrl.supprimerNoeud(n);
 
                         this.txtX.setText("");
