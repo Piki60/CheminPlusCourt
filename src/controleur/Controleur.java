@@ -49,9 +49,9 @@ public class Controleur
         metier.modifierNoeud(id, x, y);
     }
 
-    public void modifierArete(Noeud n1, Noeud n2, int cout) 
+    public void modifierArete(int id, int nouveauCout) 
     {
-        metier.modifierArete(n1, n2, cout);
+        metier.modifierArete(id, nouveauCout);
     }
    
 }

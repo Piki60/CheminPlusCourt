@@ -215,12 +215,15 @@ public class Metier
             }
     }
 
-    public void modifierArete(Noeud n1, Noeud n2, int cout) 
+    public void modifierArete(int id, int cout) 
     {
         for (Arete a : alAretes)
-            if (a.getNoeud1().getId() == n1.getId() && a.getNoeud2().getId() == n2.getId())
+        {
+            if (a.getId() == id)
             {
                 a.setCout(cout);
+                return;
             }
+        }
     }
 }

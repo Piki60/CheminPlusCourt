@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
 
@@ -29,10 +31,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import controleur.Controleur;
 import metier.Arete;
 import metier.Noeud;
-
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseAdapter;
 
 
 public class PanelFormulaire extends JPanel implements ActionListener, ListSelectionListener
@@ -63,6 +61,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         private JComboBox<Noeud>   comboNoeud2;
         private JTextField  txtCout;
         private JButton     btnAjouterArete;
+        private JButton     btnModifierArete;
         private JButton     btnSupprimerArete;
         private JList<Arete>       listAretes;
         private DefaultListModel<Arete> listModelAretes;
@@ -120,7 +119,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         }
         this.listNoeuds.setModel(this.listModelNoeuds);
 
-        this.listNoeuds.addMouseListener(new DoubleClick());
+        this.listNoeuds.addMouseListener(new DoubleClickN());
         
         this.scrollPaneNoeuds = new JScrollPane(this.listNoeuds);
         this.scrollPaneNoeuds.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -185,8 +184,13 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         this.btnAjouterArete = new JButton("Ajouter une arete");
         this.btnAjouterArete.setBackground(new Color(0, 151, 178));
 
+        this.btnModifierArete = new JButton("Modifier une arete");
+        this.btnModifierArete.setEnabled(false);
+        this.btnModifierArete.setBackground(new Color(0, 151, 178));
+
         this.btnSupprimerArete = new JButton("Supprimer une arete");
         this.btnSupprimerArete.setBackground(new Color(0, 151, 178));
+        this.btnSupprimerArete.setEnabled(false);
 
         // Liste des aretes
         this.listAretes = new JList<Arete>();
@@ -198,6 +202,8 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         }
 
         this.listAretes.setModel(this.listModelAretes);
+
+        this.listAretes.addMouseListener(new DoubleClickA());
         
         this.scrollPaneAretes = new JScrollPane(this.listAretes);
         this.scrollPaneAretes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -219,10 +225,11 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 addComponent(this.comboNoeud1).
                 addComponent(this.comboNoeud2).
                 addComponent(this.txtCout).
-                addComponent(this.btnSupprimerArete));
+                addComponent(this.btnModifierArete));
         
         hGroup2.addGroup(layout2.createParallelGroup().
                 addComponent(this.scrollPaneAretes)
+                .addComponent(this.btnSupprimerArete)
                 );
         
         layout2.setHorizontalGroup(hGroup2);
@@ -245,6 +252,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
         vGroup2.addGroup(layout2.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.btnAjouterArete).
+                addComponent(this.btnModifierArete).
                 addComponent(this.btnSupprimerArete));
 
         layout2.setVerticalGroup(vGroup2);
@@ -272,15 +280,21 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         this.add(this.panelBtn);
 
         // Ajout des listeners
+
         this.btnAjouterNoeud.addActionListener(this);
         this.btnAjouterArete.addActionListener(this);
+
         this.btnSupprimerNoeud.addActionListener(this);
         this.btnSupprimerArete.addActionListener(this);
+
         this.btnModifierNoeud.addActionListener(this);
+        this.btnModifierArete.addActionListener(this);
+
         this.btnSauvegarder.addActionListener(this);
         this.btnCheminCourt.addActionListener(this);
 
         this.listNoeuds.addListSelectionListener(this);
+        this.listAretes.addListSelectionListener(this);
     }
 
 
@@ -430,6 +444,27 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
                         this.majIHM();
                 }
+                else if (e.getSource() == this.btnModifierArete)
+                {
+                        Arete a = (Arete) this.listAretes.getSelectedValue();
+
+                        int newCout = Integer.parseInt(this.txtCout.getText());
+
+                        this.ctrl.modifierArete(a.getId(), newCout);
+
+                        this.txtCout.setText("");
+                        this.comboNoeud1.setSelectedIndex(-1);
+                        this.comboNoeud2.setSelectedIndex(-1);
+
+                        this.btnAjouterArete.setEnabled(true);  
+                        this.btnModifierArete.setEnabled(false);
+                        this.btnSupprimerArete.setEnabled(false);
+
+                        this.listAretes.clearSelection();
+
+                        this.majIHM();
+                        
+                }
         }
 
 
@@ -449,6 +484,22 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 this.btnModifierNoeud.setEnabled(true);
                         }
 
+                }
+                else if (e.getSource() == this.listAretes)
+                {
+                        if(this.listAretes.getSelectedValue() != null)
+                        {
+                                Arete a = (Arete) this.listAretes.getSelectedValue();
+
+                                this.comboNoeud1.setSelectedItem(a.getNoeud1());
+                                this.comboNoeud2.setSelectedItem(a.getNoeud2());
+                                this.txtCout.setText(String.valueOf(a.getCout()));
+
+                                this.btnAjouterArete.setEnabled(false);
+                                this.btnModifierArete.setEnabled(true);
+                                this.btnSupprimerArete.setEnabled(true);
+
+                        }
                 }
         }
 
@@ -483,7 +534,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 
         }
 
-        private class DoubleClick extends MouseAdapter
+        private class DoubleClickN extends MouseAdapter
         {
                 @Override
                 public void mouseClicked(MouseEvent e) 
@@ -499,6 +550,25 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 PanelFormulaire.this.btnModifierNoeud.setEnabled(false);
                                 PanelFormulaire.this.btnSupprimerNoeud.setEnabled(false);
     
+                        }
+                }
+        }
+
+        private class DoubleClickA extends MouseAdapter
+        {
+                @Override
+                public void mouseClicked(MouseEvent e) 
+                {
+                        if (e.getClickCount() == 2) 
+                        {               
+                                PanelFormulaire.this.listAretes.clearSelection();
+
+                                PanelFormulaire.this.comboNoeud1.setSelectedIndex(0);
+                                PanelFormulaire.this.comboNoeud2.setSelectedIndex(0);
+                                PanelFormulaire.this.txtCout.setText("");
+
+                                PanelFormulaire.this.btnAjouterArete.setEnabled(true);
+                                PanelFormulaire.this.btnSupprimerArete.setEnabled(false);
                         }
                 }
         }
