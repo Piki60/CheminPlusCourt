@@ -688,6 +688,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                         Noeud n = (Noeud) this.combo.getSelectedItem();
                                         System.out.println(n.toString());
                                         ctrl.cheminLePlusCourt(n);
+                                        new DialogTabDistance(ctrl.getTabDistances());
                                 }
                         }
                         else if(e.getSource() == this.btnAnnuler)

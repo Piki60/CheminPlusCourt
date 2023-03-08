@@ -16,7 +16,8 @@ public class Metier
 {
     private List<Noeud> alNoeuds; 
     private List<Arete> alAretes;
-    private Noeud noeudSelectionne;
+
+    private int[] tabDistances;
     
     public Metier()
     {
@@ -85,6 +86,8 @@ public class Metier
     // Getters
     public List<Noeud> getAlNoeuds() {return alNoeuds;}
     public List<Arete> getAlAretes() {return alAretes;}
+
+    public int[] getTabDistances() {return tabDistances;}
 
     public void ecrireXML(File file)
     {
@@ -255,25 +258,24 @@ public class Metier
                 distance[i] = Integer.MAX_VALUE;
         }
 
-        /*for (int i = 0; i < alNoeuds.size() - 1; i++)
+        for (int i = 0; i < alNoeuds.size() - 1; i++)
         {
             for (Arete a : alAretes)
             {
-                if (distance[a.getNoeud1().getId()] + a.getCout() < distance[a.getNoeud2().getId()])
-                    distance[a.getNoeud2().getId()] = distance[a.getNoeud1().getId()] + a.getCout();
+                int indexDepart = this.alNoeuds.indexOf(a.getNoeud1());
+                int indexArrivee = this.alNoeuds.indexOf(a.getNoeud2());
+                int cout = a.getCout();
+
+                if (distance[indexDepart] != Integer.MAX_VALUE && 
+                    distance[indexDepart] + cout < distance[indexArrivee])
+                {
+                    distance[indexArrivee] = distance[indexDepart] + cout;
+                }
             }
-        }*/
-
-        this.afficherTableau(distance);
-
-    }
-
-    public void afficherTableau(int[] t)
-    {
-        for (int i = 0; i < t.length; i++)
-        {
-            System.out.println("distance[" + i + "] = " + t[i]);
         }
+
+        this.tabDistances = distance;
+
     }
 
 }
