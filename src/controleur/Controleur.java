@@ -48,12 +48,5 @@ public class Controleur
     {
         new Controleur();
     }
-
-    
-
-   
-
-
-    
    
 }

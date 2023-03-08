@@ -237,12 +237,14 @@ public class Metier
 
     public void setPosNoeud(Noeud selectedNode, int startX, int startY) 
     {
-        for (Noeud n : alNoeuds)
-            if (n.getId() == selectedNode.getId())
+        for(int i = 0; i < alNoeuds.size(); i++)
+        {
+            if(alNoeuds.get(i) == alNoeuds.get(selectedNode.getId()))
             {
-                n.setX(startX);
-                n.setY(startY);
+                alNoeuds.get(i).setX(startX);
+                alNoeuds.get(i).setY(startY);
             }
+        }
     }
 
 }
