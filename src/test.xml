@@ -3,56 +3,86 @@
 	<noeuds>
 		<noeud id="0"> 
 			<nom>A</nom>
-			<x>20</x>
-			<y>20</y>
-		</noeud>
-		<noeud id="1"> 
-			<nom>H</nom>
-			<x>555</x>
-			<y>555</y>
-		</noeud>
-		<noeud id="2"> 
-			<nom>I</nom>
-			<x>70</x>
+			<x>100</x>
 			<y>100</y>
 		</noeud>
+		<noeud id="1"> 
+			<nom>B</nom>
+			<x>400</x>
+			<y>100</y>
+		</noeud>
+		<noeud id="2"> 
+			<nom>C</nom>
+			<x>400</x>
+			<y>400</y>
+		</noeud>
 		<noeud id="3"> 
-			<nom>K</nom>
+			<nom>D</nom>
 			<x>100</x>
 			<y>400</y>
 		</noeud>
 		<noeud id="4"> 
-			<nom>M</nom>
-			<x>700</x>
-			<y>200</y>
+			<nom>E</nom>
+			<x>250</x>
+			<y>250</y>
+		</noeud>
+		<noeud id="5"> 
+			<nom>F</nom>
+			<x>550</x>
+			<y>250</y>
 		</noeud>
 	</noeuds>
 
 	<aretes>
-		<arete id="1"> 
+		<arete id="0"> 
 			<noeud1>0</noeud1>
 			<noeud2>1</noeud2>
-			<cout>20</cout>
+			<cout>5</cout>
 		</arete>
 		<arete id="1"> 
-			<noeud1>0</noeud1>
+			<noeud1>1</noeud1>
 			<noeud2>2</noeud2>
-			<cout>2</cout>
+			<cout>10</cout>
 		</arete>
-		<arete id="1"> 
-			<noeud1>0</noeud1>
+		<arete id="2"> 
+			<noeud1>2</noeud1>
 			<noeud2>3</noeud2>
 			<cout>2</cout>
 		</arete>
-		<arete id="1"> 
-			<noeud1>2</noeud1>
-			<noeud2>1</noeud2>
-			<cout>20</cout>
+		<arete id="3"> 
+			<noeud1>3</noeud1>
+			<noeud2>0</noeud2>
+			<cout>8</cout>
 		</arete>
-		<arete id="1"> 
+		<arete id="4"> 
+			<noeud1>0</noeud1>
+			<noeud2>4</noeud2>
+			<cout>4</cout>
+		</arete>
+		<arete id="5"> 
 			<noeud1>4</noeud1>
 			<noeud2>2</noeud2>
 			<cout>5</cout>
+		</arete>
+		<arete id="7"> 
+			<noeud1>1</noeud1>
+			<noeud2>4</noeud2>
+			<cout>1</cout>
+		</arete>
+		<arete id="8"> 
+			<noeud1>4</noeud1>
+			<noeud2>5</noeud2>
+			<cout>1</cout>
+		</arete>
+		<arete id="9"> 
+			<noeud1>5</noeud1>
+			<noeud2>2</noeud2>
+			<cout>0</cout>
+		</arete>
+		<arete id="10"> 
+			<noeud1>1</noeud1>
+			<noeud2>5</noeud2>
+			<cout>2</cout>
 		</arete>
 	</aretes>
 </graphe>
