@@ -38,16 +38,10 @@ public class Controleur
     public List<Noeud> getAlNoeuds() { return metier.getAlNoeuds(); }
     public List<Arete> getAlAretes() { return metier.getAlAretes(); }
 
-    public int[] getTabDistances() { return metier.getTabDistances(); }
 
     public void setPosNoeud(Noeud selectedNode, int startX, int startY) 
     {
         metier.setPosNoeud(selectedNode, startX, startY);
-    }
-
-    public void cheminLePlusCourt(Noeud n)
-    {
-        metier.cheminLePlusCourt(n);
     }
 
     public static void main(String[] args)
