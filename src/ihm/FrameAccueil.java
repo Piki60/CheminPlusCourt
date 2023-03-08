@@ -72,6 +72,8 @@ public class FrameAccueil extends JFrame implements ActionListener
 
             fileChooser.setFileFilter(filter);
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setCurrentDirectory(new java.io.File("./src/"));
+
 
             int returnVal = fileChooser.showOpenDialog(this);
 
