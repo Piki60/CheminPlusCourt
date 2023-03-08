@@ -245,37 +245,4 @@ public class Metier
             }
     }
 
-    public void cheminLePlusCourt(Noeud n)
-    {
-        //implementation de l'algorithme de Bellman-Ford
-
-        int[] distance = new int[alNoeuds.size()];
-
-        distance[n.getId()] = 0;
-        for (int i = 0; i < alNoeuds.size(); i++)
-        {
-            if (i != n.getId())
-                distance[i] = Integer.MAX_VALUE;
-        }
-
-        for (int i = 0; i < alNoeuds.size() - 1; i++)
-        {
-            for (Arete a : alAretes)
-            {
-                int indexDepart = this.alNoeuds.indexOf(a.getNoeud1());
-                int indexArrivee = this.alNoeuds.indexOf(a.getNoeud2());
-                int cout = a.getCout();
-
-                if (distance[indexDepart] != Integer.MAX_VALUE && 
-                    distance[indexDepart] + cout < distance[indexArrivee])
-                {
-                    distance[indexArrivee] = distance[indexDepart] + cout;
-                }
-            }
-        }
-
-        this.tabDistances = distance;
-
-    }
-
 }
