@@ -31,11 +31,6 @@ public class DialogTabDistance extends JDialog
     {
         
         this.setTitle("Tableau des distances");
-        this.setLocationRelativeTo(null);
-        this.setSize(300, 300);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        this.setVisible(true);
 
         this.ctrl = ctrl;
         this.noeudDepart = noeudDepart;
@@ -43,6 +38,7 @@ public class DialogTabDistance extends JDialog
         this.lstAretes = ctrl.getAlAretes();
 
         this.table = new JTable();
+        this.table.setDefaultEditor(Object.class, null);
         this.model = new DefaultTableModel();
         this.scrollPane = new JScrollPane(table);
 
@@ -51,7 +47,14 @@ public class DialogTabDistance extends JDialog
         this.bellmanFord();
 
     
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        this.setVisible(true);
         table.setModel(model);
+
+        //on fixe la taille de la fenêtre à celle du tableau
+        this.setSize(table.getPreferredSize().width + 80, table.getPreferredSize().height + 80);
+        this.setResizable(false);
         this.add(scrollPane);
 
     }
@@ -59,16 +62,16 @@ public class DialogTabDistance extends JDialog
     public void initialisation()
     {
         //phase d'initialisation du tableau
-        String[] entetes = new String[lstNoeuds.size()];
+        String[] entetes = new String[lstNoeuds.size()+1];
         entetes[0] = "";
-        for (int i = 1; i < entetes.length; i++)
+        
+        for (int i = 0; i < lstNoeuds.size(); i++)
         {
-            entetes[i] = "N" + i;
+            entetes[i+1] = ""+lstNoeuds.get(i).getNom();
         }
 
         model.setColumnIdentifiers(entetes);
-
-
+        
         //on initialise le tableau des distances
         this.tabDistance = new int[lstNoeuds.size()];
 

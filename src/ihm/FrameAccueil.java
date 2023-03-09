@@ -70,6 +70,8 @@ public class FrameAccueil extends JFrame implements ActionListener
             JFileChooser fileChooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers XML", "xml");
 
+            fileChooser.setCurrentDirectory(new java.io.File("."));
+
             fileChooser.setFileFilter(filter);
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
