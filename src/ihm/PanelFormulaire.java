@@ -197,6 +197,15 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         this.comboNoeud1 = new JComboBox<>();
         this.comboNoeud2 = new JComboBox<>();
 
+        if ( this.lstNoeuds.size() > 0 )
+        {
+                for (int i = 0; i < this.lstNoeuds.size(); i++)
+                {
+                        this.comboNoeud1.addItem(this.lstNoeuds.get(i));
+                        this.comboNoeud2.addItem(this.lstNoeuds.get(i));
+                }
+        }
+
         this.txtCout = new JTextField(10);
         this.txtCout.addKeyListener(new NegatifTextField());
 
