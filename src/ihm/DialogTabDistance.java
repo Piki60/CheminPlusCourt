@@ -29,7 +29,6 @@ public class DialogTabDistance extends JDialog
 
     public DialogTabDistance(Controleur ctrl, Noeud noeudDepart)
     {
-        
         this.setTitle("Tableau des distances");
 
         this.ctrl = ctrl;
@@ -41,21 +40,19 @@ public class DialogTabDistance extends JDialog
         this.table.setDefaultEditor(Object.class, null);
         this.model = new DefaultTableModel();
         this.scrollPane = new JScrollPane(table);
-
         
         this.initialisation();
         this.bellmanFord();
 
-    
+        table.setModel(model);
+        this.add(scrollPane);
+
+        this.setAlwaysOnTop(true);
+        this.setSize(table.getPreferredSize().width + 80, table.getPreferredSize().height + 80);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setVisible(true);
-        table.setModel(model);
-
-        //on fixe la taille de la fenêtre à celle du tableau
-        this.setSize(table.getPreferredSize().width + 80, table.getPreferredSize().height + 80);
-        this.setResizable(false);
-        this.add(scrollPane);
 
     }
 
