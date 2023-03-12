@@ -2,47 +2,28 @@ package ihm;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Path2D;
-import java.awt.Polygon;
-import java.awt.geom.Line2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import controleur.Controleur;
 import metier.Arete;
 import metier.Noeud;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseAdapter;
-import java.awt.Point;
 
 
-public class PanelGraphe extends JPanel
+public class PanelGraphe extends JPanel 
 {
     private Controleur ctrl;
     private FrameCreerGraphe frame;
 
-
     private List<Noeud> lstNoeuds;
     private List<Arete> lstAretes;
 
-    private List<Ellipse2D.Double> noeuds;
-    private Ellipse2D.Double selectedNode;
-
-    private Integer idNoeudDrag;
-    private Noeud noeudSelec;
-    private Point pointDebut;
-    private int startX;
-    private int startY;
-
+    private int xSelectionne, ySelectionne;
+    private Noeud noeudSelectionne;
     public PanelGraphe(FrameCreerGraphe frame, Controleur ctrl)
     {
         this.ctrl = ctrl;
@@ -54,32 +35,37 @@ public class PanelGraphe extends JPanel
         this.add(new JLabel("Graphe"));
 
         addMouseListener(new MouseAdapter() {
+            
             @Override
-            public void mousePressed(MouseEvent e) {
-                for (Ellipse2D.Double node : noeuds) {
-                    if (node.contains(e.getPoint())) {
-                        selectedNode = node;
+            public void mouseClicked(MouseEvent e) {
+                
+                for (Noeud noeud : lstNoeuds) {
+                    if (e.getX() >= noeud.getX() - 10 && e.getX() <= noeud.getX() + 10
+                            && e.getY() >= noeud.getY() - 10 && e.getY() <= noeud.getY() + 10) {
+                        // Le clic de souris est sur un noeud
+                        noeudSelectionne = noeud;
+                        xSelectionne = e.getX() - noeud.getX();
+                        ySelectionne = e.getY() - noeud.getY();
                         break;
                     }
                 }
             }
-            
+        
             @Override
             public void mouseReleased(MouseEvent e) {
-                selectedNode = null;
+                
+                noeudSelectionne = null;
             }
-        });
         
-        addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (selectedNode != null) {
-                    double dx = e.getX() - selectedNode.getCenterX();
-                    double dy = e.getY() - selectedNode.getCenterY();
-                    selectedNode.setFrame(selectedNode.getX() + dx, selectedNode.getY() + dy, 20, 20);
+                if (noeudSelectionne != null) {
+                    noeudSelectionne.setX(e.getX() - xSelectionne);
+                    noeudSelectionne.setY(e.getY() - ySelectionne);
                     repaint();
                 }
             }
+
         });
 
     }
@@ -88,10 +74,6 @@ public class PanelGraphe extends JPanel
     {
         this.lstNoeuds = ctrl.getAlNoeuds();
         this.lstAretes = ctrl.getAlAretes();
-        noeuds= new ArrayList<Ellipse2D.Double>();
-        for (Noeud n : lstNoeuds) {
-            noeuds.add(new Ellipse2D.Double(n.getX(), n.getY(), 20, 20));
-        }
     }
 
     public void paint(Graphics g)
@@ -103,44 +85,17 @@ public class PanelGraphe extends JPanel
 
     private void dessinerAretes(Graphics g) 
     {
-        Graphics2D g2d = (Graphics2D) g;
+        super.paintComponent(g);
 
-
-        for (Arete a : lstAretes)
+        for (Arete arete : lstAretes) 
         {
-            Point2D pointSource = new Point2D.Double(a.getNoeud1().getX() + 20/2, a.getNoeud1().getY() + 20/2);
-            Point2D pointFin = new Point2D.Double(a.getNoeud2().getX() + 20/2, a.getNoeud2().getY() + 20/2);
-
-            dessinerFleche(g2d, pointSource, pointFin);
-
             g.setColor(Color.BLACK);
-            g.drawLine(a.getNoeud1().getX()+10, a.getNoeud1().getY()+10, a.getNoeud2().getX()+10, a.getNoeud2().getY()+10);
-            g.drawString(a.getCout()+"", (a.getNoeud1().getX()+a.getNoeud2().getX())/2, (a.getNoeud1().getY()+a.getNoeud2().getY())/2);
+            arete.draw(g);
+           
         }
-    }
-
-    private void dessinerFleche(Graphics2D g2d, Point2D pointSource, Point2D pointFin) 
-    {
-        double dx = pointFin.getX() - pointSource.getX();
-        double dy = pointFin.getY() - pointSource.getY();
-        double angle = Math.atan2(dy, dx);
-        
-        Path2D arrow = new Path2D.Double();
-        arrow.moveTo(0, 0);
-        arrow.lineTo(-10, 10);
-        arrow.lineTo(-10, -10);
-        arrow.closePath();
-        
-        AffineTransform transform = new AffineTransform();
-        transform.translate(pointFin.getX()-5, pointFin.getY()+5);
-        transform.rotate(angle - Math.PI/34);
-        transform.scale(1, 1);
-        
-        g2d.fill(transform.createTransformedShape(arrow));
 
     }
     
-
     private void dessinerNoeuds(Graphics g) 
     {
         for (Noeud n : lstNoeuds)
@@ -151,7 +106,6 @@ public class PanelGraphe extends JPanel
             g.drawString(n.getNom()+"", n.getX()+7, n.getY()+15);
         }   
     }   
-
  
     public void majIHM() 
     {
@@ -160,10 +114,8 @@ public class PanelGraphe extends JPanel
         this.repaint();
     }
 
-    
-
     public Noeud getNoeudSelec() {
-        return noeudSelec;
-    }
+        return noeudSelectionne;
+    } 
 
 }
