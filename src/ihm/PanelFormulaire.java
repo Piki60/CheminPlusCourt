@@ -198,7 +198,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         this.comboNoeud2 = new JComboBox<>();
 
         this.txtCout = new JTextField(10);
-        this.txtCout.addKeyListener(new EntierTextField());
+        this.txtCout.addKeyListener(new NegatifTextField());
 
         this.btnAjouterArete = new JButton("Ajouter une arete");
         this.btnAjouterArete.setBackground(new Color(0, 151, 178));
@@ -614,6 +614,23 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                         // on récupère le caractère qui vient d'être saisi et si ce n'est pas un chiffre (méthode isDigit()), on l'ignore
                         char c = e.getKeyChar();
                         if(!Character.isDigit(c))
+                        {
+                                e.consume();
+                        }
+                }
+        }
+
+        private class NegatifTextField extends KeyAdapter
+        {
+                @Override
+                public void keyTyped(KeyEvent e) 
+                {
+                        char c = e.getKeyChar();
+                        if(!Character.isDigit(c) && c != '-')
+                        {
+                                e.consume();
+                        }
+                        else if (c == '-' && PanelFormulaire.this.txtCout.getText().contains("-"))
                         {
                                 e.consume();
                         }
