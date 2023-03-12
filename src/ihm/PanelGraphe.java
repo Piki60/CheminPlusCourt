@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Path2D;
+import java.awt.Polygon;
+import java.awt.geom.Line2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
@@ -137,6 +139,7 @@ public class PanelGraphe extends JPanel
         g2d.fill(transform.createTransformedShape(arrow));
 
     }
+    
 
     private void dessinerNoeuds(Graphics g) 
     {
