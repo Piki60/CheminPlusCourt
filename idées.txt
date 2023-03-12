@@ -1,5 +1,3 @@
--faire en sorte que le JDialog reste par dessus le panel
 -les flèches 
 -faire en sorte que quand on clique sur un des noeuds du graphes, il bouge en mm temps
--bug sur formulaire des auretes (boutons)
 -circuit absorbant
