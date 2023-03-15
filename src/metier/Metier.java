@@ -16,8 +16,6 @@ public class Metier
 {
     private List<Noeud> alNoeuds; 
     private List<Arete> alAretes;
-
-    private int[] tabDistances;
     
     public Metier()
     {
@@ -25,6 +23,7 @@ public class Metier
         alAretes = new ArrayList<Arete>();
     }
 
+    //Méthodes "ajout"
     public boolean ajouterNoeud(Noeud n)
     {
         if (n == null || alNoeuds.contains(n))
@@ -53,6 +52,7 @@ public class Metier
         return true;
     }
 
+    //Méthodes "modification"
     public boolean supprimerNoeud(Noeud n)
     {
         if (n == null || !alNoeuds.contains(n))
@@ -87,8 +87,8 @@ public class Metier
     public List<Noeud> getAlNoeuds() {return alNoeuds;}
     public List<Arete> getAlAretes() {return alAretes;}
 
-    public int[] getTabDistances() {return tabDistances;}
 
+    // Méthodes de lecture et d'écriture
     public void ecrireXML(File file)
     {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -98,6 +98,7 @@ public class Metier
         xml += tab + "<noeuds>\n";
         tab += "\t";
 
+        // Noeuds
         for(Noeud n : alNoeuds)
         {
             xml += tab + "<noeud id=\"" + n.getId() + "\"> \n";
@@ -119,6 +120,7 @@ public class Metier
 
         tab += "\t";
 
+        // Aretes
         for(Arete a : alAretes)
         {
             xml += tab + "<arete id=\"" + a.getId() + "\"> \n";
@@ -152,8 +154,6 @@ public class Metier
 
     public void lireXML(File file)
     {
-        Map<Integer, Noeud> mapNoeuds = new HashMap<Integer, Noeud>();
-        
         Document document = null;
         Element racine;
 
@@ -173,16 +173,11 @@ public class Metier
 
         for (Element noeud : noeuds.getChildren())
         {
-            int id = Integer.parseInt(noeud.getAttributeValue("id"));
-
             char nom = noeud.getChildText("nom").charAt(0);
             int x = Integer.parseInt(noeud.getChildText("x"));
             int y = Integer.parseInt(noeud.getChildText("y"));
 
-            ajouterNoeud(new Noeud(nom, x, y));
-
-            mapNoeuds.put(id, getNoeud(id));
-            
+            ajouterNoeud(new Noeud(nom, x, y));  
         }
 
         Element aretes = racine.getChild("aretes");
@@ -198,8 +193,6 @@ public class Metier
             int cout = Integer.parseInt(arete.getChildText("cout"));
 
             ajouterArete(new Arete(noeud1, noeud2, cout));
-
-
         }
     }
 
@@ -234,17 +227,4 @@ public class Metier
             }
         }
     }
-
-    public void setPosNoeud(Noeud selectedNode, int startX, int startY) 
-    {
-        for(int i = 0; i < alNoeuds.size(); i++)
-        {
-            if(alNoeuds.get(i) == alNoeuds.get(selectedNode.getId()))
-            {
-                alNoeuds.get(i).setX(startX);
-                alNoeuds.get(i).setY(startY);
-            }
-        }
-    }
-
 }
