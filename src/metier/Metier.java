@@ -16,6 +16,8 @@ public class Metier
 {
     private List<Noeud> alNoeuds; 
     private List<Arete> alAretes;
+
+    private int[] tabDistance;
     
     public Metier()
     {
