@@ -136,17 +136,22 @@ public class DialogTabDistance extends JDialog
             if (model.getRowCount() > 0)
             {
                 //on récupère chaque élément de la ligne précédente
-                Vector<Object> lignePrecedente = model.getDataVector().elementAt(model.getRowCount() - 1);
+                Object[] tabLignePrecedente = new Object[model.getColumnCount() - 1];
+
+                for (int j = 0; j < tabLignePrecedente.length; j++)
+                {
+                    tabLignePrecedente[j] = model.getValueAt(model.getRowCount() - 1, j + 1);
+                }
 
                 //on vérifie si la ligne actuelle est identique à la précédente
                 int nbIdentiques = 0;
-                for (int j = 1; j < lignePrecedente.size(); j++)
+                for (int j = 0; j < tabLignePrecedente.length; j++)
                 {
-                    if (lignePrecedente.get(j).equals(ligne[j]))
+                    if (tabLignePrecedente[j].equals(ligne[j + 1]))
                         nbIdentiques++;
                 }
 
-                if (nbIdentiques == lignePrecedente.size() - 1)
+                if (nbIdentiques == tabLignePrecedente.length)
                     break;
                 else 
                     model.addRow(ligne);
