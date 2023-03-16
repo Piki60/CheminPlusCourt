@@ -1,9 +1,12 @@
 package ihm;
 
+import java.awt.BorderLayout;
+
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -30,6 +33,7 @@ public class DialogTabDistance extends JDialog
     public DialogTabDistance(Controleur ctrl, Noeud noeudDepart)
     {
         this.setTitle("Tableau des distances");
+        this.setLayout(new BorderLayout());
 
         this.ctrl = ctrl;
         this.noeudDepart = noeudDepart;
@@ -45,7 +49,7 @@ public class DialogTabDistance extends JDialog
         this.bellmanFord();
 
         table.setModel(model);
-        this.add(scrollPane);
+        this.add(scrollPane, BorderLayout.CENTER);
 
         this.setAlwaysOnTop(true);
         this.setSize(table.getPreferredSize().width + 80, table.getPreferredSize().height + 80);
@@ -145,6 +149,28 @@ public class DialogTabDistance extends JDialog
 
             }
 
+        }
+
+        //circuit absorbant
+        boolean circuitAbsorbant = false;
+        for (Arete a : lstAretes)
+        {
+            int indexDepart = this.lstNoeuds.indexOf(a.getNoeud1());
+            int indexArrivee = this.lstNoeuds.indexOf(a.getNoeud2());
+            int cout = a.getCout();
+
+            if (tabDistance[indexDepart] != Integer.MAX_VALUE && 
+                tabDistance[indexDepart] + cout < tabDistance[indexArrivee])
+            {
+                circuitAbsorbant = true;
+                break;
+            }
+        }
+
+        if (circuitAbsorbant)
+        {
+            this.add(new JLabel("Il y a un circuit absorbant"), BorderLayout.SOUTH);
+            System.out.println("Il y a un circuit absorbant");
         }
     }
 }
