@@ -207,7 +207,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         }
 
         this.txtCout = new JTextField(10);
-        this.txtCout.addKeyListener(new NegatifTextField());
+        this.txtCout.addKeyListener(new EntierTextField());
 
         this.btnAjouterArete = new JButton("Ajouter une arete");
         this.btnAjouterArete.setBackground(new Color(0, 151, 178));
@@ -645,7 +645,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 }
         }      
 
-        private class DialogChoixChemin extends JDialog implements ActionListener
+        private class DialogCheminCourt extends JDialog implements ActionListener
         {
                 private JComboBox<Noeud> combo;
 
