@@ -31,6 +31,11 @@
 			<x>550</x>
 			<y>250</y>
 		</noeud>
+		<noeud id="6"> 
+			<nom>G</nom>
+			<x>700</x>
+			<y>250</y>
+		</noeud>
 	</noeuds>
 
 	<aretes>
@@ -83,6 +88,26 @@
 			<noeud1>4</noeud1>
 			<noeud2>1</noeud2>
 			<cout>-1</cout>
+		</arete>
+		<arete id="10"> 
+			<noeud1>4</noeud1>
+			<noeud2>3</noeud2>
+			<cout>-4</cout>
+		</arete>
+		<arete id="11"> 
+			<noeud1>6</noeud1>
+			<noeud2>1</noeud2>
+			<cout>12</cout>
+		</arete>
+		<arete id="12"> 
+			<noeud1>5</noeud1>
+			<noeud2>6</noeud2>
+			<cout>-6</cout>
+		</arete>
+		<arete id="13"> 
+			<noeud1>2</noeud1>
+			<noeud2>6</noeud2>
+			<cout>7</cout>
 		</arete>
 	</aretes>
 </graphe>

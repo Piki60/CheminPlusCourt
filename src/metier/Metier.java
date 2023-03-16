@@ -1,23 +1,18 @@
 package metier;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 
-import java.io.File;
-import java.io.FileWriter;
-
 public class Metier 
 {
     private List<Noeud> alNoeuds; 
     private List<Arete> alAretes;
-
-    private int[] tabDistance;
     
     public Metier()
     {
@@ -32,7 +27,6 @@ public class Metier
             return false;
 
         alNoeuds.add(n);
-        System.out.println(n.toString());
         return true;
     }
 

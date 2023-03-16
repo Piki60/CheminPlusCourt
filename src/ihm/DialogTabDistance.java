@@ -1,6 +1,9 @@
 package ihm;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+
+import java.awt.Component;
 
 import java.util.List;
 import java.util.Vector;
@@ -10,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import controleur.Controleur;
 import metier.Arete;
@@ -32,7 +36,7 @@ public class DialogTabDistance extends JDialog
 
     public DialogTabDistance(Controleur ctrl, Noeud noeudDepart)
     {
-        this.setTitle("Tableau des distances");
+        this.setTitle("Tableau des distances de " + noeudDepart.getNom());
         this.setLayout(new BorderLayout());
 
         this.ctrl = ctrl;
