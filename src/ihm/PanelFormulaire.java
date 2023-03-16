@@ -207,7 +207,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         }
 
         this.txtCout = new JTextField(10);
-        this.txtCout.addKeyListener(new EntierTextField());
+        this.txtCout.addKeyListener(new NegatifTextField());
 
         this.btnAjouterArete = new JButton("Ajouter une arete");
         this.btnAjouterArete.setBackground(new Color(0, 151, 178));
@@ -712,9 +712,9 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 else
                                 {
                                         Noeud n = (Noeud) this.combo.getSelectedItem();
-                                        System.out.println(n.toString());
-                                        new DialogTabDistance(ctrl, n);
                                         this.dispose();
+                                        new DialogTabDistance(ctrl, n);
+                                        
                                 }
                         }
                         else if(e.getSource() == this.btnAnnuler)
