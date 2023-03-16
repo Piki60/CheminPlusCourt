@@ -1,5 +1,6 @@
 package ihm;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -16,7 +17,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -86,8 +86,13 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         // Panel Noeuds
         this.panelNoeuds = new JPanel();
         this.panelNoeuds.setBackground(new Color(216,216,216));
-        GroupLayout layout = new GroupLayout(this.panelNoeuds);
-        this.panelNoeuds.setLayout(layout);
+
+        JPanel panelFormNoeud = new JPanel();
+        panelFormNoeud.setBackground(new Color(216,216,216));
+
+        GroupLayout layout = new GroupLayout( panelFormNoeud);
+        panelFormNoeud.setLayout(layout);
+
 
 
         //Composants du panel Noeuds
@@ -123,6 +128,9 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         this.btnSupprimerNoeud.setEnabled(false);
 
         // Liste des noeuds
+        JPanel panelListN = new JPanel();
+        panelListN.setBackground(new Color(216,216,216));
+
         this.listNoeuds = new JList<Noeud>();
 
         this.listModelNoeuds = new DefaultListModel<Noeud>();
@@ -136,7 +144,8 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         
         this.scrollPaneNoeuds = new JScrollPane(this.listNoeuds);
         this.scrollPaneNoeuds.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        //this.scrollPaneNoeuds.setMinimumSize(new Dimension(200, 100));
+        this.scrollPaneNoeuds.setPreferredSize(new Dimension(155,100));
+        panelListN.add(this.scrollPaneNoeuds);
 
         // Ajout des composants au panel Noeuds
         layout.setAutoCreateGaps(true);
@@ -156,24 +165,20 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 addComponent(this.btnModifierNoeud));
 
         hGroup.addGroup(layout.createParallelGroup().
-                addComponent(this.scrollPaneNoeuds)
-                .addComponent(this.btnSupprimerNoeud));
+                addComponent(this.btnSupprimerNoeud));
         
         layout.setHorizontalGroup(hGroup);
 
         GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblNom).
-                addComponent(this.txtNom)
-                .addComponent(this.scrollPaneNoeuds));
+                addComponent(this.txtNom));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblX).
-                addComponent(this.txtX)
-                .addComponent(this.scrollPaneNoeuds));
+                addComponent(this.txtX));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblY).
-                addComponent(this.txtY)
-                .addComponent(this.scrollPaneNoeuds));
+                addComponent(this.txtY));
         vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.btnAjouterNoeud).
                 addComponent(this.btnModifierNoeud).
@@ -181,13 +186,19 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
         layout.setVerticalGroup(vGroup);
 
+        this.panelNoeuds.add(panelFormNoeud, BorderLayout.WEST);
+        this.panelNoeuds.add(panelListN, BorderLayout.EAST);
+
 
         // Panel Aretes
         this.panelAretes = new JPanel();
         this.panelAretes.setBackground(new Color(216,216,216));
+
+        JPanel panelFormArete = new JPanel();
+        panelFormArete.setBackground(new Color(216,216,216));
         
-        GroupLayout layout2 = new GroupLayout(this.panelAretes);
-        this.panelAretes.setLayout(layout2);
+        GroupLayout layout2 = new GroupLayout(panelFormArete);
+        panelFormArete.setLayout(layout2);
 
         //Composants du panel Aretes
         this.lblNoeud1 = new JLabel("Noeud 1 :");
@@ -221,6 +232,9 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         this.btnSupprimerArete.setEnabled(false);
 
         // Liste des aretes
+        JPanel panelListA = new JPanel();
+        panelListA.setBackground(new Color(216,216,216));
+
         this.listAretes = new JList<Arete>();
 
         this.listModelAretes = new DefaultListModel<Arete>();
@@ -235,7 +249,8 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         
         this.scrollPaneAretes = new JScrollPane(this.listAretes);
         this.scrollPaneAretes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        
+        this.scrollPaneAretes.setPreferredSize(new Dimension(160,100));
+        panelListA.add(this.scrollPaneAretes);
 
         // Ajout des composants au panel Aretes
         layout2.setAutoCreateGaps(true);
@@ -255,8 +270,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 addComponent(this.btnModifierArete));
         
         hGroup2.addGroup(layout2.createParallelGroup().
-                addComponent(this.scrollPaneAretes)
-                .addComponent(this.btnSupprimerArete)
+                addComponent(this.btnSupprimerArete)
                 );
         
         layout2.setHorizontalGroup(hGroup2);
@@ -264,18 +278,15 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
         GroupLayout.SequentialGroup vGroup2 = layout2.createSequentialGroup();
         vGroup2.addGroup(layout2.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblNoeud1).
-                addComponent(this.comboNoeud1)
-                .addComponent(this.scrollPaneAretes));
+                addComponent(this.comboNoeud1));
 
         vGroup2.addGroup(layout2.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblNoeud2).
-                addComponent(this.comboNoeud2)
-                .addComponent(this.scrollPaneAretes));
+                addComponent(this.comboNoeud2));
         
         vGroup2.addGroup(layout2.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.lblCout).
-                addComponent(this.txtCout)
-                .addComponent(this.scrollPaneAretes));
+                addComponent(this.txtCout));
 
         vGroup2.addGroup(layout2.createParallelGroup(GroupLayout.Alignment.BASELINE).
                 addComponent(this.btnAjouterArete).
@@ -283,6 +294,9 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                 addComponent(this.btnSupprimerArete));
 
         layout2.setVerticalGroup(vGroup2);
+
+        this.panelAretes.add(panelFormArete, BorderLayout.WEST);
+        this.panelAretes.add(panelListA, BorderLayout.EAST);
 
         // Panel BTN
         this.panelBtn = new JPanel();
