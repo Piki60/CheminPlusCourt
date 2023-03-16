@@ -31,8 +31,6 @@ public class DialogTabDistance extends JDialog
     {
         this.setTitle("Tableau des distances");
 
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
         this.ctrl = ctrl;
         this.noeudDepart = noeudDepart;
         this.lstNoeuds = ctrl.getAlNoeuds();

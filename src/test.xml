@@ -64,22 +64,22 @@
 			<noeud2>2</noeud2>
 			<cout>5</cout>
 		</arete>
-		<arete id="7"> 
+		<arete id="6"> 
 			<noeud1>4</noeud1>
 			<noeud2>5</noeud2>
 			<cout>1</cout>
 		</arete>
-		<arete id="8"> 
+		<arete id="7"> 
 			<noeud1>5</noeud1>
 			<noeud2>2</noeud2>
 			<cout>0</cout>
 		</arete>
-		<arete id="9"> 
+		<arete id="8"> 
 			<noeud1>1</noeud1>
 			<noeud2>5</noeud2>
 			<cout>2</cout>
 		</arete>
-		<arete id="10"> 
+		<arete id="9"> 
 			<noeud1>4</noeud1>
 			<noeud2>1</noeud2>
 			<cout>-1</cout>
