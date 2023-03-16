@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
+import javax.swing.JDialog;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
