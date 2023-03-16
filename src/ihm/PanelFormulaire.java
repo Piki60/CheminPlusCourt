@@ -458,7 +458,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 return;
                         }
                         
-                        new DialogChoixChemin();                        
+                        new DialogCheminCourt();                        
                 }
                 else if (e.getSource() == this.btnModifierNoeud)
                 {
@@ -654,7 +654,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
 
                 private List<Noeud> lstNoeuds = PanelFormulaire.this.ctrl.getAlNoeuds();
 
-                public DialogChoixChemin()
+                public DialogCheminCourt()
                 {
 
                         Dimension dim = new Dimension (350, 150);
