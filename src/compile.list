@@ -1,0 +1,11 @@
+./controleur/Controleur.java
+./metier/Noeud.java
+./metier/Arete.java
+./metier/Metier.java
+./ihm/DialogTabDistance.java
+./ihm/PanelFormulaire.java
+./ihm/PanelGraphe.java
+./ihm/FrameCreerGraphe.java
+./ihm/FrameAccueil.java
+
+-d ./bin -cp .:./lib/*
