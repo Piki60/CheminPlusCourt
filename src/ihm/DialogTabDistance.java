@@ -1,6 +1,9 @@
 package ihm;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+
+import java.awt.Component;
 
 import java.util.List;
 import java.util.Vector;
@@ -10,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import controleur.Controleur;
 import metier.Arete;
@@ -32,7 +36,7 @@ public class DialogTabDistance extends JDialog
 
     public DialogTabDistance(Controleur ctrl, Noeud noeudDepart)
     {
-        this.setTitle("Tableau des distances");
+        this.setTitle("Tableau des distances de " + noeudDepart.getNom());
         this.setLayout(new BorderLayout());
 
         this.ctrl = ctrl;
@@ -132,17 +136,22 @@ public class DialogTabDistance extends JDialog
             if (model.getRowCount() > 0)
             {
                 //on récupère chaque élément de la ligne précédente
-                Vector<Object> lignePrecedente = model.getDataVector().elementAt(model.getRowCount() - 1);
+                Object[] tabLignePrecedente = new Object[model.getColumnCount() - 1];
+
+                for (int j = 0; j < tabLignePrecedente.length; j++)
+                {
+                    tabLignePrecedente[j] = model.getValueAt(model.getRowCount() - 1, j + 1);
+                }
 
                 //on vérifie si la ligne actuelle est identique à la précédente
                 int nbIdentiques = 0;
-                for (int j = 1; j < lignePrecedente.size(); j++)
+                for (int j = 0; j < tabLignePrecedente.length; j++)
                 {
-                    if (lignePrecedente.get(j).equals(ligne[j]))
+                    if (tabLignePrecedente[j].equals(ligne[j + 1]))
                         nbIdentiques++;
                 }
 
-                if (nbIdentiques == lignePrecedente.size() - 1)
+                if (nbIdentiques == tabLignePrecedente.length)
                     break;
                 else 
                     model.addRow(ligne);

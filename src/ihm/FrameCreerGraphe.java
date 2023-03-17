@@ -14,7 +14,7 @@ public class FrameCreerGraphe extends JFrame
     {
         this.ctrl = ctrl;
         
-        this.setTitle("graphe");
+        this.setTitle("Création d'un graphe");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLayout(new BorderLayout());
 

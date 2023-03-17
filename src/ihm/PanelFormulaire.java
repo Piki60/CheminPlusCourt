@@ -12,12 +12,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
-import javax.swing.JDialog;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -623,6 +623,7 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 PanelFormulaire.this.txtCout.setText("");
 
                                 PanelFormulaire.this.btnAjouterArete.setEnabled(true);
+                                PanelFormulaire.this.btnModifierArete.setEnabled(false);
                                 PanelFormulaire.this.btnSupprimerArete.setEnabled(false);
                         }
                 }
@@ -654,6 +655,10 @@ public class PanelFormulaire extends JPanel implements ActionListener, ListSelec
                                 e.consume();
                         }
                         else if (c == '-' && PanelFormulaire.this.txtCout.getText().contains("-"))
+                        {
+                                e.consume();
+                        }
+                        else if (c == '-' && PanelFormulaire.this.txtCout.getText().length() != 0)
                         {
                                 e.consume();
                         }
